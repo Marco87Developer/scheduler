@@ -66,7 +66,7 @@ enum DayOfWeek implements Comparable<DayOfWeek> {
   }
 
   /// The name of this enum.
-  static String enumName = DayOfWeek.values.first.runtimeType.toString();
+  static const String enumName = 'DayOfWeek';
 
   /// The number of this day of the week (1 to 7).
   final int number;
