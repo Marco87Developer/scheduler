@@ -18,9 +18,7 @@ enum Appointment implements Comparable<Appointment> {
         .toLowerCase();
     return switch (lowerNoWhiteSpaces) {
       'elder' || 'e' => .elder,
-      'ministerialservant' ||
-      'ministerial servant' ||
-      'ms' => .ministerialservant,
+      'ministerialservant' || 'ms' => .ministerialservant,
       _ => throw FormatException(
         parseFormatExceptionMessage(enumName, formattedString),
         formattedString,
