@@ -27,7 +27,7 @@ enum Gender implements Comparable<Gender> {
   }
 
   /// The name of this enum.
-  static String enumName = Gender.values.first.runtimeType.toString();
+  static const String enumName = 'Gender';
 
   /// Returns if this gender comes before the [other] in alphabetical order.
   ///
