@@ -27,7 +27,7 @@ enum Appointment implements Comparable<Appointment> {
   }
 
   /// The name of this enum.
-  static String enumName = Appointment.values.first.runtimeType.toString();
+  static const String enumName = 'Appointment';
 
   /// Returns if this appointment comes before the [other] in alphabetical
   /// order.
