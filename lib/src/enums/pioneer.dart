@@ -40,23 +40,23 @@ enum Pioneer implements Comparable<Pioneer> {
   /// The duration factor.
   final int _duration;
 
-  /// Returns if the duration of this pioneering kind is longer than the
+  /// Returns if the duration of this pioneering kind is shorter than the
   /// [other].
   ///
   bool operator <(covariant final Pioneer other) => compareTo(other) < 0;
 
-  /// Returns if the duration of this pioneering kind is greater than or equal
-  /// to the [other].
+  /// Returns if the duration of this pioneering kind is less than or equal to
+  /// the [other].
   ///
   bool operator <=(covariant final Pioneer other) => compareTo(other) <= 0;
 
-  /// Returns if the duration of this pioneering kind is shorter than the
+  /// Returns if the duration of this pioneering kind is longer than the
   /// [other].
   ///
   bool operator >(covariant final Pioneer other) => compareTo(other) > 0;
 
-  /// Returns if the duration of this pioneering kind is less than or equal to
-  /// the [other].
+  /// Returns if the duration of this pioneering kind is greater than or equal
+  /// to the [other].
   ///
   bool operator >=(covariant final Pioneer other) => compareTo(other) >= 0;
 
