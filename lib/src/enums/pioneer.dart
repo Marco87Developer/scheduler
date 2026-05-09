@@ -35,7 +35,7 @@ enum Pioneer implements Comparable<Pioneer> {
   }
 
   /// The name of this enum.
-  static String enumName = Pioneer.values.first.runtimeType.toString();
+  static const String enumName = 'Pioneer';
 
   /// The duration factor.
   final int _duration;
