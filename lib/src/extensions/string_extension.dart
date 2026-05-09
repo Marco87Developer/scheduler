@@ -1,8 +1,17 @@
 /// Extension methods on the [String] class.
 ///
 extension StringExtension on String {
-  /// Whitespace regular expression
-  static final RegExp _whitespaceRegExp = RegExp(r'\s+');
+  /// Whitespace regular expression (with Unicode support).
+  static final RegExp _whitespaceRegExp = RegExp(r'\s+', unicode: true);
+
+  /// Returns a string obtained by replacing each sequence of one or more
+  /// whitespace characters with a single space, and trimming any leading or
+  /// trailing whitespace.
+  ///
+  /// Useful for normalizing user input where multiple consecutive spaces, tabs,
+  /// or newlines should be collapsed into one.
+  ///
+  String collapseWhitespace() => replaceAll(_whitespaceRegExp, ' ').trim();
 
   /// Returns a string obtained by removing all whitespace characters from this
   /// string.
