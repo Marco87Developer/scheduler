@@ -34,7 +34,7 @@ enum DayOfWeek implements Comparable<DayOfWeek> {
   /// range from 1 (monday) to 7 (sunday).
   ///
   factory DayOfWeek.fromNumber(final int number) =>
-      DayOfWeek.values[(number % 7 + 6) % 7 + 1];
+      DayOfWeek.values[(number % 7 + 6) % 7];
 
   /// Constructs a new [DayOfWeek] instance from a [formattedString].
   ///
