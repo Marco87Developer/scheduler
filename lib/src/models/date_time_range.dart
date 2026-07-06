@@ -115,37 +115,35 @@ class DateTimeRange implements Comparable<DateTimeRange> {
   /// are the same, the [end] of this date time range is before the end of the
   /// [other] date time range.
   ///
-  bool operator <(covariant final DateTimeRange other) => compareTo(other) < 0;
+  bool operator <(final DateTimeRange other) => compareTo(other) < 0;
 
   /// Returns whether the [start] of this date time range is before the start of
   /// the [other] date time range. Or whether, in the case where the two starts
   /// are the same, the [end] of this date time range is before or coincides
   /// with the end of the [other] date time range.
   ///
-  bool operator <=(covariant final DateTimeRange other) =>
-      compareTo(other) <= 0;
+  bool operator <=(final DateTimeRange other) => compareTo(other) <= 0;
 
   @override
-  bool operator ==(covariant final DateTimeRange other) =>
-      identical(this, other) || compareTo(other) == 0;
+  bool operator ==(final Object other) =>
+      identical(this, other) || other is DateTimeRange && compareTo(other) == 0;
 
   /// Returns whether the [start] of this date time range is after the start of
   /// the [other] date time range. Or whether, in the case where the two starts
   /// are the same, the [end] of this date time range is after the end of the
   /// [other] date time range.
   ///
-  bool operator >(covariant final DateTimeRange other) => compareTo(other) > 0;
+  bool operator >(final DateTimeRange other) => compareTo(other) > 0;
 
   /// Returns whether the [start] of this date time range is after the start of
   /// the [other] date time range. Or whether, in the case where the two starts
   /// are the same, the [end] of this date time range is after or coincides
   /// with the end of the [other] date time range.
   ///
-  bool operator >=(covariant final DateTimeRange other) =>
-      compareTo(other) >= 0;
+  bool operator >=(final DateTimeRange other) => compareTo(other) >= 0;
 
   @override
-  int compareTo(covariant final DateTimeRange other) {
+  int compareTo(final DateTimeRange other) {
     if (identical(this, other)) {
       return 0;
     }
