@@ -64,7 +64,7 @@ class ServiceYear implements Comparable<ServiceYear> {
 
   @override
   bool operator ==(final Object other) =>
-      identical(this, other) || other is ServiceYear && compareTo(other) == 0;
+      identical(this, other) || (other is ServiceYear && compareTo(other) == 0);
 
   /// Returns if this service year starts after the [other].
   ///
