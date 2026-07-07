@@ -76,7 +76,7 @@ class ServiceYear implements Comparable<ServiceYear> {
   bool operator >=(final ServiceYear other) => compareTo(other) >= 0;
 
   @override
-  int compareTo(ServiceYear other) =>
+  int compareTo(final ServiceYear other) =>
       identical(this, other) ? 0 : startingYear.compareTo(other.startingYear);
 
   /// Whether [reference] falls within this service year.
