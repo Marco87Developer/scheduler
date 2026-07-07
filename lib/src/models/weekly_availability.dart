@@ -114,32 +114,29 @@ class WeeklyAvailability implements Comparable<WeeklyAvailability> {
 
   /// Returns if this weekly availability comes before the [other].
   ///
-  bool operator <(covariant final WeeklyAvailability other) =>
-      compareTo(other) < 0;
+  bool operator <(final WeeklyAvailability other) => compareTo(other) < 0;
 
   /// Returns if this weekly availability comes before the or is equal to the
   /// [other].
   ///
-  bool operator <=(covariant final WeeklyAvailability other) =>
-      compareTo(other) <= 0;
+  bool operator <=(final WeeklyAvailability other) => compareTo(other) <= 0;
 
   @override
-  bool operator ==(covariant final WeeklyAvailability other) =>
-      identical(this, other) || compareTo(other) == 0;
+  bool operator ==(final Object other) =>
+      identical(this, other) ||
+      other is WeeklyAvailability && compareTo(other) == 0;
 
   /// Returns if this weekly availability comes after the [other].
   ///
-  bool operator >(covariant final WeeklyAvailability other) =>
-      compareTo(other) > 0;
+  bool operator >(final WeeklyAvailability other) => compareTo(other) > 0;
 
   /// Returns if this weekly availability comes after the or is equal to the
   /// [other].
   ///
-  bool operator >=(covariant final WeeklyAvailability other) =>
-      compareTo(other) >= 0;
+  bool operator >=(final WeeklyAvailability other) => compareTo(other) >= 0;
 
   @override
-  int compareTo(covariant final WeeklyAvailability other) {
+  int compareTo(final WeeklyAvailability other) {
     if (identical(this, other)) {
       return 0;
     }
