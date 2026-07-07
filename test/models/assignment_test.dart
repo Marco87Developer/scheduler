@@ -666,6 +666,7 @@ void main() {
         start: earlier,
         end: later,
       );
+      // ignore: unnecessary_null_comparison
       expect(a == null, isFalse);
     });
   });
