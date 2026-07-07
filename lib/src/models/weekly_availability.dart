@@ -124,7 +124,7 @@ class WeeklyAvailability implements Comparable<WeeklyAvailability> {
   @override
   bool operator ==(final Object other) =>
       identical(this, other) ||
-      other is WeeklyAvailability && compareTo(other) == 0;
+      (other is WeeklyAvailability && compareTo(other) == 0);
 
   /// Returns if this weekly availability comes after the [other].
   ///
