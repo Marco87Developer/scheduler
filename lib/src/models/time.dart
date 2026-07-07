@@ -135,7 +135,7 @@ class Time implements Comparable<Time> {
 
   @override
   bool operator ==(final Object other) =>
-      identical(this, other) || other is Time && compareTo(other) == 0;
+      identical(this, other) || (other is Time && compareTo(other) == 0);
 
   /// Returns if this time is later than the [other].
   ///
