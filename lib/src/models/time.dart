@@ -127,25 +127,26 @@ class Time implements Comparable<Time> {
 
   /// Returns if this time is earlier than the [other].
   ///
-  bool operator <(covariant final Time other) => isBefore(other);
+  bool operator <(final Time other) => isBefore(other);
 
   /// Returns if this time is earlier than or equal to the [other].
   ///
-  bool operator <=(covariant final Time other) => isBeforeOrEqual(other);
+  bool operator <=(final Time other) => isBeforeOrEqual(other);
 
   @override
-  bool operator ==(covariant final Time other) => compareTo(other) == 0;
+  bool operator ==(final Object other) =>
+      identical(this, other) || other is Time && compareTo(other) == 0;
 
   /// Returns if this time is later than the [other].
   ///
-  bool operator >(covariant final Time other) => isAfter(other);
+  bool operator >(final Time other) => isAfter(other);
 
   /// Returns if this time is later than or equal to the [other].
   ///
-  bool operator >=(covariant final Time other) => isAfterOrEqual(other);
+  bool operator >=(final Time other) => isAfterOrEqual(other);
 
   @override
-  int compareTo(covariant final Time other) => identical(this, other)
+  int compareTo(final Time other) => identical(this, other)
       ? 0
       : _secondsSinceMidnight.compareTo(other._secondsSinceMidnight);
 
