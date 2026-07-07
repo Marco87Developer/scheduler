@@ -126,7 +126,8 @@ class DateTimeRange implements Comparable<DateTimeRange> {
 
   @override
   bool operator ==(final Object other) =>
-      identical(this, other) || other is DateTimeRange && compareTo(other) == 0;
+      identical(this, other) ||
+      (other is DateTimeRange && compareTo(other) == 0);
 
   /// Returns whether the [start] of this date time range is after the start of
   /// the [other] date time range. Or whether, in the case where the two starts
