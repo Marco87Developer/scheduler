@@ -55,28 +55,28 @@ class ServiceYear implements Comparable<ServiceYear> {
 
   /// Returns if this service year starts before the [other].
   ///
-  bool operator <(covariant final ServiceYear other) => compareTo(other) < 0;
+  bool operator <(final ServiceYear other) => compareTo(other) < 0;
 
   /// Returns if this service year starts before or at the same time as the
   /// [other].
   ///
-  bool operator <=(covariant final ServiceYear other) => compareTo(other) <= 0;
+  bool operator <=(final ServiceYear other) => compareTo(other) <= 0;
 
   @override
-  bool operator ==(covariant final ServiceYear other) =>
-      identical(this, other) || compareTo(other) == 0;
+  bool operator ==(final Object other) =>
+      identical(this, other) || other is ServiceYear && compareTo(other) == 0;
 
   /// Returns if this service year starts after the [other].
   ///
-  bool operator >(covariant final ServiceYear other) => compareTo(other) > 0;
+  bool operator >(final ServiceYear other) => compareTo(other) > 0;
 
   /// Returns if this service year starts after or at the same time as the
   /// [other].
   ///
-  bool operator >=(covariant final ServiceYear other) => compareTo(other) >= 0;
+  bool operator >=(final ServiceYear other) => compareTo(other) >= 0;
 
   @override
-  int compareTo(covariant ServiceYear other) =>
+  int compareTo(ServiceYear other) =>
       identical(this, other) ? 0 : startingYear.compareTo(other.startingYear);
 
   /// Whether [reference] falls within this service year.
