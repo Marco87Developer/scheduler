@@ -19,7 +19,7 @@ enum Pioneer implements Comparable<Pioneer> {
 
   /// Constructs a new [Pioneer] instance from a [formattedString].
   ///
-  factory Pioneer.parse(final String formattedString) {
+  factory Pioneer.parse(String formattedString) {
     final String lowerNoWhiteSpaces = formattedString
         .removeAllWhitespace()
         .toLowerCase();
@@ -43,25 +43,25 @@ enum Pioneer implements Comparable<Pioneer> {
   /// Returns if the duration of this pioneering kind is shorter than the
   /// [other].
   ///
-  bool operator <(covariant final Pioneer other) => compareTo(other) < 0;
+  bool operator <(covariant Pioneer other) => compareTo(other) < 0;
 
   /// Returns if the duration of this pioneering kind is less than or equal to
   /// the [other].
   ///
-  bool operator <=(covariant final Pioneer other) => compareTo(other) <= 0;
+  bool operator <=(covariant Pioneer other) => compareTo(other) <= 0;
 
   /// Returns if the duration of this pioneering kind is longer than the
   /// [other].
   ///
-  bool operator >(covariant final Pioneer other) => compareTo(other) > 0;
+  bool operator >(covariant Pioneer other) => compareTo(other) > 0;
 
   /// Returns if the duration of this pioneering kind is greater than or equal
   /// to the [other].
   ///
-  bool operator >=(covariant final Pioneer other) => compareTo(other) >= 0;
+  bool operator >=(covariant Pioneer other) => compareTo(other) >= 0;
 
   @override
-  int compareTo(covariant final Pioneer other) =>
+  int compareTo(covariant Pioneer other) =>
       identical(this, other) ? 0 : _duration.compareTo(other._duration);
 
   @override

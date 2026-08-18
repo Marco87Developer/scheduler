@@ -361,7 +361,7 @@ void main() {
           className: 'C',
           map: <String, Object?>{'k': 7},
           key: 'k',
-          parser: (final int v) => v * 2,
+          parser: (int v) => v * 2,
         ),
         equals(14),
       );
@@ -1992,34 +1992,34 @@ void main() {
   });
 }
 
-Matcher _fmtMsgContains(final String text) => isA<FormatException>().having(
-  (final FormatException e) => e.message,
+Matcher _fmtMsgContains(String text) => isA<FormatException>().having(
+  (FormatException e) => e.message,
   'message',
   contains(text),
 );
 
-Matcher _fmtMsgEquals(final String message) => isA<FormatException>().having(
-  (final FormatException e) => e.message,
+Matcher _fmtMsgEquals(String message) => isA<FormatException>().having(
+  (FormatException e) => e.message,
   'message',
   equals(message),
 );
 
-Matcher _fmtSource(final Object? expected) => isA<FormatException>().having(
-  (final FormatException e) => e.source,
+Matcher _fmtSource(Object? expected) => isA<FormatException>().having(
+  (FormatException e) => e.source,
   'source',
   equals(expected),
 );
 
-int _identityInt(final int v) => v;
+int _identityInt(int v) => v;
 
-String _identityString(final String v) => v;
+String _identityString(String v) => v;
 
-String _intToString(final int v) => v.toString();
+String _intToString(int v) => v.toString();
 
-String _msg(final String className, final String key) =>
+String _msg(String className, String key) =>
     "$className.fromMap: map['$key'] value is invalid.";
 
-String _stringFromMap(final Map<String, Object?> m) {
+String _stringFromMap(Map<String, Object?> m) {
   final Object? v = m['v'];
   if (v is String) return v;
   throw FormatException('Invalid', m);

@@ -122,7 +122,7 @@ void main() {
         () => Appointment.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('Appointment'),
           ),
@@ -135,7 +135,7 @@ void main() {
         () => Appointment.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('invalid'),
           ),
@@ -148,7 +148,7 @@ void main() {
         () => Appointment.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.source,
+            (FormatException e) => e.source,
             'source',
             equals('invalid'),
           ),
@@ -312,14 +312,14 @@ void main() {
     test('elder is the minimum value', () {
       final List<Appointment> sorted = List<Appointment>.from(
         Appointment.values,
-      )..sort((final Appointment a, final Appointment b) => a.compareTo(b));
+      )..sort((Appointment a, Appointment b) => a.compareTo(b));
       expect(sorted.first, equals(Appointment.elder));
     });
 
     test('ministerialservant is the maximum value', () {
       final List<Appointment> sorted = List<Appointment>.from(
         Appointment.values,
-      )..sort((final Appointment a, final Appointment b) => a.compareTo(b));
+      )..sort((Appointment a, Appointment b) => a.compareTo(b));
       expect(sorted.last, equals(Appointment.ministerialservant));
     });
 

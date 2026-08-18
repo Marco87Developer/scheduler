@@ -10,14 +10,14 @@ import 'package:scheduler/src/helpers/iterable_helpers.dart';
 class HourCredit implements Comparable<HourCredit> {
   /// Constructs a new [HourCredit] instance.
   ///
-  HourCredit(this.description, this.hours, {final Iterable<String>? tags})
+  HourCredit(this.description, this.hours, {Iterable<String>? tags})
     : tags = UnmodifiableSetView<String>(
         SplayTreeSet<String>.of(tags ?? const <String>[]),
       );
 
   /// Constructs a new [HourCredit] instance from a [formattedString].
   ///
-  factory HourCredit.parse(final String formattedString) {
+  factory HourCredit.parse(String formattedString) {
     final FormatException invalid = FormatException(
       parseFormatExceptionMessage(className, formattedString),
       formattedString,
@@ -35,8 +35,8 @@ class HourCredit implements Comparable<HourCredit> {
           int.parse(h.trim()),
           tags: t
               .split(',')
-              .map((final String tag) => tag.trim())
-              .where((final String tag) => tag.isNotEmpty),
+              .map((String tag) => tag.trim())
+              .where((String tag) => tag.isNotEmpty),
         ),
         _ => throw invalid,
       };
@@ -62,27 +62,27 @@ class HourCredit implements Comparable<HourCredit> {
 
   /// Returns if this hour credit comes before the [other].
   ///
-  bool operator <(final HourCredit other) => compareTo(other) < 0;
+  bool operator <(HourCredit other) => compareTo(other) < 0;
 
   /// Returns if this hour credit comes before or is equal to the [other].
   ///
-  bool operator <=(final HourCredit other) => compareTo(other) <= 0;
+  bool operator <=(HourCredit other) => compareTo(other) <= 0;
 
   @override
-  bool operator ==(final Object other) =>
+  bool operator ==(Object other) =>
       identical(this, other) || (other is HourCredit && compareTo(other) == 0);
 
   /// Returns if this service year starts after the [other].
   ///
-  bool operator >(final HourCredit other) => compareTo(other) > 0;
+  bool operator >(HourCredit other) => compareTo(other) > 0;
 
   /// Returns if this service year starts after or at the same time as the
   /// [other].
   ///
-  bool operator >=(final HourCredit other) => compareTo(other) >= 0;
+  bool operator >=(HourCredit other) => compareTo(other) >= 0;
 
   @override
-  int compareTo(final HourCredit other) {
+  int compareTo(HourCredit other) {
     if (identical(this, other)) {
       return 0;
     }

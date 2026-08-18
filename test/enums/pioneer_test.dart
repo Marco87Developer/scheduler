@@ -192,7 +192,7 @@ void main() {
         () => Pioneer.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('Pioneer'),
           ),
@@ -205,7 +205,7 @@ void main() {
         () => Pioneer.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('invalid'),
           ),
@@ -218,7 +218,7 @@ void main() {
         () => Pioneer.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.source,
+            (FormatException e) => e.source,
             'source',
             equals('invalid'),
           ),
@@ -231,7 +231,7 @@ void main() {
         () => Pioneer.parse('INVALID'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.source,
+            (FormatException e) => e.source,
             'source',
             equals('INVALID'),
           ),
@@ -244,7 +244,7 @@ void main() {
         () => Pioneer.parse(' invalid '),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.source,
+            (FormatException e) => e.source,
             'source',
             equals(' invalid '),
           ),
@@ -511,7 +511,7 @@ void main() {
 
     test('toString results are all distinct', () {
       final Set<String> strings = Pioneer.values
-          .map((final Pioneer p) => p.toString())
+          .map((Pioneer p) => p.toString())
           .toSet();
       expect(strings, hasLength(Pioneer.values.length));
     });
@@ -553,19 +553,19 @@ void main() {
   group('Pioneer — ordering consistency', () {
     test('auxiliary is the minimum value (shortest duration)', () {
       final List<Pioneer> sorted = List<Pioneer>.from(Pioneer.values)
-        ..sort((final Pioneer a, final Pioneer b) => a.compareTo(b));
+        ..sort((Pioneer a, Pioneer b) => a.compareTo(b));
       expect(sorted.first, equals(Pioneer.auxiliary));
     });
 
     test('regular is the maximum value (longest duration)', () {
       final List<Pioneer> sorted = List<Pioneer>.from(Pioneer.values)
-        ..sort((final Pioneer a, final Pioneer b) => a.compareTo(b));
+        ..sort((Pioneer a, Pioneer b) => a.compareTo(b));
       expect(sorted.last, equals(Pioneer.regular));
     });
 
     test('sorted order is auxiliary, auxiliarycontinuously, regular', () {
       final List<Pioneer> sorted = List<Pioneer>.from(Pioneer.values)
-        ..sort((final Pioneer a, final Pioneer b) => a.compareTo(b));
+        ..sort((Pioneer a, Pioneer b) => a.compareTo(b));
       expect(
         sorted,
         equals(<Pioneer>[

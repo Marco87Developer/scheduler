@@ -94,7 +94,7 @@ void main() {
 
     test('all numbers are distinct', () {
       final Set<int> numbers = DayOfWeek.values
-          .map((final DayOfWeek d) => d.number)
+          .map((DayOfWeek d) => d.number)
           .toSet();
       expect(numbers, hasLength(DayOfWeek.values.length));
     });
@@ -413,7 +413,7 @@ void main() {
         () => DayOfWeek.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('DayOfWeek'),
           ),
@@ -426,7 +426,7 @@ void main() {
         () => DayOfWeek.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('invalid'),
           ),
@@ -439,7 +439,7 @@ void main() {
         () => DayOfWeek.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.source,
+            (FormatException e) => e.source,
             'source',
             equals('invalid'),
           ),
@@ -452,7 +452,7 @@ void main() {
         () => DayOfWeek.parse('INVALID'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.source,
+            (FormatException e) => e.source,
             'source',
             equals('INVALID'),
           ),
@@ -640,7 +640,7 @@ void main() {
 
     test('toString results are all distinct', () {
       final Set<String> strings = DayOfWeek.values
-          .map((final DayOfWeek d) => d.toString())
+          .map((DayOfWeek d) => d.toString())
           .toSet();
       expect(strings, hasLength(DayOfWeek.values.length));
     });
@@ -671,19 +671,19 @@ void main() {
   group('DayOfWeek — ordering consistency', () {
     test('monday is the minimum value', () {
       final List<DayOfWeek> sorted = List<DayOfWeek>.from(DayOfWeek.values)
-        ..sort((final DayOfWeek a, final DayOfWeek b) => a.compareTo(b));
+        ..sort((DayOfWeek a, DayOfWeek b) => a.compareTo(b));
       expect(sorted.first, equals(DayOfWeek.monday));
     });
 
     test('sunday is the maximum value', () {
       final List<DayOfWeek> sorted = List<DayOfWeek>.from(DayOfWeek.values)
-        ..sort((final DayOfWeek a, final DayOfWeek b) => a.compareTo(b));
+        ..sort((DayOfWeek a, DayOfWeek b) => a.compareTo(b));
       expect(sorted.last, equals(DayOfWeek.sunday));
     });
 
     test('sorted order matches the weekday sequence', () {
       final List<DayOfWeek> sorted = List<DayOfWeek>.from(DayOfWeek.values)
-        ..sort((final DayOfWeek a, final DayOfWeek b) => a.compareTo(b));
+        ..sort((DayOfWeek a, DayOfWeek b) => a.compareTo(b));
       expect(sorted, equals(DayOfWeek.values));
     });
 

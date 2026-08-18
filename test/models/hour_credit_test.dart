@@ -130,9 +130,8 @@ void main() {
     });
 
     test('throws FormatException when hours is not an integer', () {
-      check(
-        () => HourCredit.parse('Field service|abc'),
-      ).throws<FormatException>();
+      check(() => HourCredit.parse('Field service|abc'))
+          .throws<FormatException>();
     });
 
     test('throws FormatException on empty input', () {
@@ -140,14 +139,13 @@ void main() {
     });
 
     test('throws FormatException with too many segments', () {
-      check(
-        () => HourCredit.parse('Field service|10|a|extra'),
-      ).throws<FormatException>();
+      check(() => HourCredit.parse('Field service|10|a|extra'))
+          .throws<FormatException>();
     });
 
     test('FormatException carries the original formatted string', () {
       check(() => HourCredit.parse('bad')).throws<FormatException>()
-        ..has((final FormatException e) => e.source, 'source').equals('bad');
+        ..has((FormatException e) => e.source, 'source').equals('bad');
     });
   });
 

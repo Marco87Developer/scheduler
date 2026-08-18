@@ -15,7 +15,7 @@ class ServiceYear implements Comparable<ServiceYear> {
 
   /// Constructs a new [ServiceYear] instance based on [reference].
   ///
-  ServiceYear.fromReference(final DateTime reference)
+  ServiceYear.fromReference(DateTime reference)
     : this(reference.month >= firstMonth ? reference.year : reference.year - 1);
 
   /// Constructs a new [ServiceYear] instance from a [formattedString].
@@ -23,7 +23,7 @@ class ServiceYear implements Comparable<ServiceYear> {
   /// Throws a [FormatException] if [formattedString] cannot be parsed as an
   /// `int`.
   ///
-  factory ServiceYear.parse(final String formattedString) =>
+  factory ServiceYear.parse(String formattedString) =>
       switch (int.tryParse(formattedString.trim())) {
         final int year => ServiceYear(year),
         null => throw FormatException(
@@ -55,28 +55,28 @@ class ServiceYear implements Comparable<ServiceYear> {
 
   /// Returns if this service year starts before the [other].
   ///
-  bool operator <(final ServiceYear other) => compareTo(other) < 0;
+  bool operator <(ServiceYear other) => compareTo(other) < 0;
 
   /// Returns if this service year starts before or at the same time as the
   /// [other].
   ///
-  bool operator <=(final ServiceYear other) => compareTo(other) <= 0;
+  bool operator <=(ServiceYear other) => compareTo(other) <= 0;
 
   @override
-  bool operator ==(final Object other) =>
+  bool operator ==(Object other) =>
       identical(this, other) || (other is ServiceYear && compareTo(other) == 0);
 
   /// Returns if this service year starts after the [other].
   ///
-  bool operator >(final ServiceYear other) => compareTo(other) > 0;
+  bool operator >(ServiceYear other) => compareTo(other) > 0;
 
   /// Returns if this service year starts after or at the same time as the
   /// [other].
   ///
-  bool operator >=(final ServiceYear other) => compareTo(other) >= 0;
+  bool operator >=(ServiceYear other) => compareTo(other) >= 0;
 
   @override
-  int compareTo(final ServiceYear other) =>
+  int compareTo(ServiceYear other) =>
       identical(this, other) ? 0 : startingYear.compareTo(other.startingYear);
 
   /// Whether [reference] falls within this service year.
@@ -84,7 +84,7 @@ class ServiceYear implements Comparable<ServiceYear> {
   /// Returns true when [reference] is on or after [start] and strictly before
   /// [end].
   ///
-  bool contains(final DateTime reference) =>
+  bool contains(DateTime reference) =>
       reference.isAfterOrAtSameMomentAs(start) && reference.isBefore(end);
 
   /// The number of months remaining in this service year, counting
@@ -92,7 +92,7 @@ class ServiceYear implements Comparable<ServiceYear> {
   ///
   /// Returns `null` when [reference] is outside this service year.
   ///
-  int? monthsLeft(final DateTime reference) =>
+  int? monthsLeft(DateTime reference) =>
       contains(reference) ? 12 - monthsPassed(reference)! : null;
 
   /// The number of complete months elapsed since the [start] of this service
@@ -100,7 +100,7 @@ class ServiceYear implements Comparable<ServiceYear> {
   ///
   /// Returns `null` when [reference] is outside this service year.
   ///
-  int? monthsPassed(final DateTime reference) =>
+  int? monthsPassed(DateTime reference) =>
       contains(reference) ? (reference.month + 12 - firstMonth) % 12 : null;
 
   @override
@@ -109,7 +109,7 @@ class ServiceYear implements Comparable<ServiceYear> {
   /// Parses [formattedString] like [ServiceYear.parse], but returns `null`
   /// instead of throwing when [formattedString] is not a valid integer.
   ///
-  static ServiceYear? tryParse(final String formattedString) {
+  static ServiceYear? tryParse(String formattedString) {
     final int? year = int.tryParse(formattedString.trim());
     return year != null ? ServiceYear(year) : null;
   }

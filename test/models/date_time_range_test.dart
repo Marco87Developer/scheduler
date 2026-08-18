@@ -186,7 +186,7 @@ void main() {
         () => DateTimeRange.fromMap(const <String, Object?>{'end': 'x'}),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('DateTimeRange'),
           ),
@@ -203,7 +203,7 @@ void main() {
         () => DateTimeRange.fromMap(map),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.source,
+            (FormatException e) => e.source,
             'source',
             'bad',
           ),
@@ -314,7 +314,7 @@ void main() {
         () => DateTimeRange.fromJson('null'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('DateTimeRange'),
           ),
@@ -327,7 +327,7 @@ void main() {
         () => DateTimeRange.fromJson('null'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('.fromJson'),
           ),
@@ -341,7 +341,7 @@ void main() {
         () => DateTimeRange.fromJson(json),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.source,
+            (FormatException e) => e.source,
             'source',
             equals(json),
           ),
@@ -355,7 +355,7 @@ void main() {
         () => DateTimeRange.fromJson(json),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.source,
+            (FormatException e) => e.source,
             'source',
             equals(json),
           ),
@@ -453,7 +453,7 @@ void main() {
         () => DateTimeRange.parse('bad'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('DateTimeRange'),
           ),
@@ -466,7 +466,7 @@ void main() {
         () => DateTimeRange.parse('bad'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('.parse'),
           ),
@@ -479,7 +479,7 @@ void main() {
         () => DateTimeRange.parse('bad|input'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('bad|input'),
           ),
@@ -493,7 +493,7 @@ void main() {
         () => DateTimeRange.parse(input),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.source,
+            (FormatException e) => e.source,
             'source',
             equals(input),
           ),
@@ -507,7 +507,7 @@ void main() {
         () => DateTimeRange.parse(input),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.source,
+            (FormatException e) => e.source,
             'source',
             equals(input),
           ),
@@ -1402,11 +1402,8 @@ void main() {
       final DateTimeRange a = DateTimeRange(t1, t3);
       final DateTimeRange b = DateTimeRange(t2, t4);
       final DateTimeRange c = DateTimeRange(t3, t5);
-      final DateTimeRange merged = DateTimeRange.merge(<DateTimeRange>[
-        a,
-        b,
-        c,
-      ]).first;
+      final DateTimeRange merged = DateTimeRange.merge(<DateTimeRange>[a, b, c])
+          .first;
       expect(merged.start, equals(t1));
       expect(merged.end, equals(t5));
     });
@@ -1492,5 +1489,5 @@ DateTimeRange r34() => DateTimeRange(t3, t4);
 DateTimeRange r45() => DateTimeRange(t4, t5);
 
 /// Creates a [SplayTreeSet<DateTimeRange>] from [ranges].
-SplayTreeSet<DateTimeRange> rangeSet(final Iterable<DateTimeRange> ranges) =>
+SplayTreeSet<DateTimeRange> rangeSet(Iterable<DateTimeRange> ranges) =>
     SplayTreeSet<DateTimeRange>.from(ranges);

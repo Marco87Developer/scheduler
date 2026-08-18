@@ -33,7 +33,7 @@ enum DayOfWeek implements Comparable<DayOfWeek> {
   /// It first normalizes the input [number] to ensure that it falls within the
   /// range from 1 (monday) to 7 (sunday).
   ///
-  factory DayOfWeek.fromNumber(final int number) =>
+  factory DayOfWeek.fromNumber(int number) =>
       DayOfWeek.values[(number % 7 + 6) % 7];
 
   /// Constructs a new [DayOfWeek] instance from a [formattedString].
@@ -43,7 +43,7 @@ enum DayOfWeek implements Comparable<DayOfWeek> {
   /// integer. In the latter case, it leaves the task to the
   /// [DayOfWeek.fromNumber] constructor.
   ///
-  factory DayOfWeek.parse(final String formattedString) {
+  factory DayOfWeek.parse(String formattedString) {
     final String lowerNoWhiteSpaces = formattedString
         .removeAllWhitespace()
         .toLowerCase();
@@ -73,24 +73,24 @@ enum DayOfWeek implements Comparable<DayOfWeek> {
 
   /// Returns if this day of the week comes before [other] during the week.
   ///
-  bool operator <(covariant final DayOfWeek other) => compareTo(other) < 0;
+  bool operator <(covariant DayOfWeek other) => compareTo(other) < 0;
 
   /// Returns whether this day of the week comes before [other] during the week
   /// or if it is the same day of the week.
   ///
-  bool operator <=(covariant final DayOfWeek other) => compareTo(other) <= 0;
+  bool operator <=(covariant DayOfWeek other) => compareTo(other) <= 0;
 
   /// Returns if this day of the week comes after [other] during the week.
   ///
-  bool operator >(covariant final DayOfWeek other) => compareTo(other) > 0;
+  bool operator >(covariant DayOfWeek other) => compareTo(other) > 0;
 
   /// Returns whether this day of the week comes after [other] during the week
   /// or if it is the same day of the week.
   ///
-  bool operator >=(covariant final DayOfWeek other) => compareTo(other) >= 0;
+  bool operator >=(covariant DayOfWeek other) => compareTo(other) >= 0;
 
   @override
-  int compareTo(covariant final DayOfWeek other) =>
+  int compareTo(covariant DayOfWeek other) =>
       identical(this, other) ? 0 : number.compareTo(other.number);
 
   @override

@@ -265,7 +265,7 @@ void main() {
         () => ServiceYear.parse('bad'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('ServiceYear'),
           ),
@@ -278,7 +278,7 @@ void main() {
         () => ServiceYear.parse('bad'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('.parse'),
           ),
@@ -291,7 +291,7 @@ void main() {
         () => ServiceYear.parse('bad'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('bad'),
           ),
@@ -304,7 +304,7 @@ void main() {
         () => ServiceYear.parse(' bad '),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.source,
+            (FormatException e) => e.source,
             'source',
             equals(' bad '),
           ),
@@ -653,7 +653,7 @@ void main() {
   group('ServiceYear — ordering consistency', () {
     test('sorted list is in ascending startingYear order', () {
       final List<ServiceYear> unsorted = <ServiceYear>[sy2025, sy2023, sy2024]
-        ..sort((final ServiceYear a, final ServiceYear b) => a.compareTo(b));
+        ..sort((ServiceYear a, ServiceYear b) => a.compareTo(b));
       expect(unsorted, equals(<ServiceYear>[sy2023, sy2024, sy2025]));
     });
   });

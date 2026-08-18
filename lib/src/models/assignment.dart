@@ -20,14 +20,14 @@ class Assignment implements Comparable<Assignment> {
   ///
   Assignment({
     required this.title,
-    required final DateTime start,
-    required final DateTime end,
+    required DateTime start,
+    required DateTime end,
   }) : start = minDateTime(start, end),
        end = maxDateTime(start, end);
 
   /// Constructs a new [Assignment] instance based on [json].
   ///
-  factory Assignment.fromJson(final String json) {
+  factory Assignment.fromJson(String json) {
     final Object? decoded;
     final FormatException invalid = FormatException(
       fromJsonFormatExceptionMessage(className, json),
@@ -46,7 +46,7 @@ class Assignment implements Comparable<Assignment> {
 
   /// Constructs a new [Assignment] instance based on [map].
   ///
-  Assignment.fromMap(final Map<String, Object?> map)
+  Assignment.fromMap(Map<String, Object?> map)
     : this(
         title: parseString(className: className, map: map, key: _titleKey),
         start: parseClass(
@@ -65,7 +65,7 @@ class Assignment implements Comparable<Assignment> {
 
   /// Constructs a new [Assignment] instance from a [formattedString].
   ///
-  factory Assignment.parse(final String formattedString) {
+  factory Assignment.parse(String formattedString) {
     final String trimmed = formattedString.trim();
     final List<String> strings = trimmed.split('|');
     final FormatException invalid = FormatException(
@@ -107,26 +107,26 @@ class Assignment implements Comparable<Assignment> {
 
   /// Returns if this assignment comes before the [other].
   ///
-  bool operator <(final Assignment other) => compareTo(other) < 0;
+  bool operator <(Assignment other) => compareTo(other) < 0;
 
   /// Returns if this assignment comes before or is equal to the [other].
   ///
-  bool operator <=(final Assignment other) => compareTo(other) <= 0;
+  bool operator <=(Assignment other) => compareTo(other) <= 0;
 
   @override
-  bool operator ==(final Object other) =>
+  bool operator ==(Object other) =>
       identical(this, other) || (other is Assignment && compareTo(other) == 0);
 
   /// Returns if this assignment comes after the [other].
   ///
-  bool operator >(final Assignment other) => compareTo(other) > 0;
+  bool operator >(Assignment other) => compareTo(other) > 0;
 
   /// Returns if this assignment comes after or is equal to the [other].
   ///
-  bool operator >=(final Assignment other) => compareTo(other) >= 0;
+  bool operator >=(Assignment other) => compareTo(other) >= 0;
 
   @override
-  int compareTo(final Assignment other) {
+  int compareTo(Assignment other) {
     if (identical(this, other)) {
       return 0;
     }
@@ -144,15 +144,12 @@ class Assignment implements Comparable<Assignment> {
   /// Creates a copy of this [Assignment] instance, but with the given fields
   /// replaced with the new values.
   ///
-  Assignment copyWith({
-    final String? title,
-    final DateTime? start,
-    final DateTime? end,
-  }) => Assignment(
-    title: title ?? this.title,
-    start: start ?? this.start,
-    end: end ?? this.end,
-  );
+  Assignment copyWith({String? title, DateTime? start, DateTime? end}) =>
+      Assignment(
+        title: title ?? this.title,
+        start: start ?? this.start,
+        end: end ?? this.end,
+      );
 
   /// Returns a JSON string representing this instance of [Assignment].
   ///

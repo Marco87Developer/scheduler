@@ -12,7 +12,7 @@ enum Gender implements Comparable<Gender> {
 
   /// Constructs a new [Gender] instance from a [formattedString].
   ///
-  factory Gender.parse(final String formattedString) {
+  factory Gender.parse(String formattedString) {
     final String lowerNoWhiteSpaces = formattedString
         .removeAllWhitespace()
         .toLowerCase();
@@ -31,24 +31,24 @@ enum Gender implements Comparable<Gender> {
 
   /// Returns if this gender comes before the [other] in alphabetical order.
   ///
-  bool operator <(covariant final Gender other) => compareTo(other) < 0;
+  bool operator <(covariant Gender other) => compareTo(other) < 0;
 
   /// Returns if this gender comes before or is equal to the [other] in
   /// alphabetical order.
   ///
-  bool operator <=(covariant final Gender other) => compareTo(other) <= 0;
+  bool operator <=(covariant Gender other) => compareTo(other) <= 0;
 
   /// Returns if this gender comes after the [other] in alphabetical order.
   ///
-  bool operator >(covariant final Gender other) => compareTo(other) > 0;
+  bool operator >(covariant Gender other) => compareTo(other) > 0;
 
   /// Returns if this gender comes after or is equal to the [other] in
   /// alphabetical order.
   ///
-  bool operator >=(covariant final Gender other) => compareTo(other) >= 0;
+  bool operator >=(covariant Gender other) => compareTo(other) >= 0;
 
   @override
-  int compareTo(covariant final Gender other) =>
+  int compareTo(covariant Gender other) =>
       identical(this, other) ? 0 : name.compareTo(other.name);
 
   @override

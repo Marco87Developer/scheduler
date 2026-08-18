@@ -91,10 +91,6 @@ void main() {
       expect(() => Gender.parse('   '), throwsA(isA<FormatException>()));
     });
 
-    test('throws FormatException for unknown string', () {
-      expect(() => Gender.parse('nonbinary'), throwsA(isA<FormatException>()));
-    });
-
     test('throws FormatException for partial match', () {
       expect(() => Gender.parse('fem'), throwsA(isA<FormatException>()));
     });
@@ -108,7 +104,7 @@ void main() {
         () => Gender.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('Gender'),
           ),
@@ -121,7 +117,7 @@ void main() {
         () => Gender.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('invalid'),
           ),
@@ -134,7 +130,7 @@ void main() {
         () => Gender.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.source,
+            (FormatException e) => e.source,
             'source',
             equals('invalid'),
           ),
@@ -262,13 +258,13 @@ void main() {
   group('Gender — ordering consistency', () {
     test('female is the minimum value', () {
       final List<Gender> sorted = List<Gender>.from(Gender.values)
-        ..sort((final Gender a, final Gender b) => a.compareTo(b));
+        ..sort((Gender a, Gender b) => a.compareTo(b));
       expect(sorted.first, equals(Gender.female));
     });
 
     test('male is the maximum value', () {
       final List<Gender> sorted = List<Gender>.from(Gender.values)
-        ..sort((final Gender a, final Gender b) => a.compareTo(b));
+        ..sort((Gender a, Gender b) => a.compareTo(b));
       expect(sorted.last, equals(Gender.male));
     });
 

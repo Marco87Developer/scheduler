@@ -8,12 +8,11 @@ import 'package:scheduler/src/helpers/iterable_helpers.dart';
 extension SplayTreeSetExtension<T extends Comparable<T>> on SplayTreeSet<T> {
   /// Compares this [SplayTreeSet] with [other] lexicographically.
   ///
-  int compareTo(final SplayTreeSet<T> other) =>
-      elementCompareIterables(this, other);
+  int compareTo(SplayTreeSet<T> other) => elementCompareIterables(this, other);
 
   /// Compares this [SplayTreeSet] with [other] lexicographically, but starting
   /// from the last element.
   ///
-  int compareToReversed(final SplayTreeSet<T> other) =>
+  int compareToReversed(SplayTreeSet<T> other) =>
       elementCompareIterablesReversed(this, other);
 }

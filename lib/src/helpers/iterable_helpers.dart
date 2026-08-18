@@ -5,8 +5,8 @@
 /// are equal.
 ///
 int elementCompareIterables<T extends Comparable<T>>(
-  final Iterable<T> a,
-  final Iterable<T> b,
+  Iterable<T> a,
+  Iterable<T> b,
 ) => identical(a, b) ? 0 : _elementComparison<T>(a, b);
 
 /// Compares two [Iterable]s of [Comparable] elements from end to start.
@@ -24,8 +24,8 @@ int elementCompareIterables<T extends Comparable<T>>(
 /// * `0` if both iterables are identical in elements and length.
 ///
 int elementCompareIterablesReversed<T extends Comparable<T>>(
-  final Iterable<T> a,
-  final Iterable<T> b,
+  Iterable<T> a,
+  Iterable<T> b,
 ) {
   if (identical(a, b)) {
     return 0;
@@ -51,10 +51,7 @@ int elementCompareIterablesReversed<T extends Comparable<T>>(
 /// * `-1` if [b] is longer.
 /// * `0` if both iterables are identical in elements and length.
 ///
-int _elementComparison<T extends Comparable<T>>(
-  final Iterable<T> a,
-  final Iterable<T> b,
-) {
+int _elementComparison<T extends Comparable<T>>(Iterable<T> a, Iterable<T> b) {
   final Iterator<T> ai = a.iterator;
   final Iterator<T> bi = b.iterator;
   bool aHasNext = ai.moveNext();

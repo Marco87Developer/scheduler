@@ -29,9 +29,8 @@ void main() {
     });
 
     test('first element larger gives positive result', () {
-      check(
-        intSet(<int>[3, 9]).compareTo(intSet(<int>[2, 9])),
-      ).isGreaterThan(0);
+      check(intSet(<int>[3, 9]).compareTo(intSet(<int>[2, 9])))
+          .isGreaterThan(0);
     });
 
     test('first elements equal, second smaller gives negative', () {
@@ -39,16 +38,14 @@ void main() {
     });
 
     test('first elements equal, second larger gives positive', () {
-      check(
-        intSet(<int>[1, 4]).compareTo(intSet(<int>[1, 3])),
-      ).isGreaterThan(0);
+      check(intSet(<int>[1, 4]).compareTo(intSet(<int>[1, 3])))
+          .isGreaterThan(0);
     });
 
     test('comparison stops at first differing element', () {
       // [1, 2, 99] vs [1, 3, 4]: second pair differs → negative.
-      check(
-        intSet(<int>[1, 2, 99]).compareTo(intSet(<int>[1, 3, 4])),
-      ).isNegative();
+      check(intSet(<int>[1, 2, 99]).compareTo(intSet(<int>[1, 3, 4])))
+          .isNegative();
     });
   });
 
@@ -147,9 +144,8 @@ void main() {
     });
 
     test('larger first element gives positive result', () {
-      check(
-        intSet(<int>[3, 5]).compareTo(intSet(<int>[2, 5])),
-      ).isGreaterThan(0);
+      check(intSet(<int>[3, 5]).compareTo(intSet(<int>[2, 5])))
+          .isGreaterThan(0);
     });
 
     test('first elements equal, smaller second gives negative', () {
@@ -157,21 +153,18 @@ void main() {
     });
 
     test('first elements equal, larger second gives positive', () {
-      check(
-        intSet(<int>[1, 4]).compareTo(intSet(<int>[1, 3])),
-      ).isGreaterThan(0);
+      check(intSet(<int>[1, 4]).compareTo(intSet(<int>[1, 3])))
+          .isGreaterThan(0);
     });
 
     test('negative integers are ordered correctly', () {
-      check(
-        intSet(<int>[-3, -1]).compareTo(intSet(<int>[-2, -1])),
-      ).isNegative();
+      check(intSet(<int>[-3, -1]).compareTo(intSet(<int>[-2, -1])))
+          .isNegative();
     });
 
     test('mixed negative and positive integers', () {
-      check(
-        intSet(<int>[-1, 0, 1]).compareTo(intSet(<int>[-1, 0, 2])),
-      ).isNegative();
+      check(intSet(<int>[-1, 0, 1]).compareTo(intSet(<int>[-1, 0, 2])))
+          .isNegative();
     });
   });
 
@@ -191,9 +184,8 @@ void main() {
     test('antisymmetry holds for empty vs non-empty', () {
       final SplayTreeSet<int> empty = intSet(<int>[]);
       final SplayTreeSet<int> nonEmpty = intSet(<int>[1]);
-      check(
-        empty.compareTo(nonEmpty).sign,
-      ).equals(-nonEmpty.compareTo(empty).sign);
+      check(empty.compareTo(nonEmpty).sign)
+          .equals(-nonEmpty.compareTo(empty).sign);
     });
   });
 
@@ -244,15 +236,13 @@ void main() {
     });
 
     test('multi-element equal sets return 0', () {
-      check(
-        intSet(<int>[1, 2, 3]).compareToReversed(intSet(<int>[1, 2, 3])),
-      ).equals(0);
+      check(intSet(<int>[1, 2, 3]).compareToReversed(intSet(<int>[1, 2, 3])))
+          .equals(0);
     });
 
     test('insertion order is irrelevant (SplayTreeSet sorts)', () {
-      check(
-        intSet(<int>[3, 1, 2]).compareToReversed(intSet(<int>[1, 2, 3])),
-      ).equals(0);
+      check(intSet(<int>[3, 1, 2]).compareToReversed(intSet(<int>[1, 2, 3])))
+          .equals(0);
     });
   });
 
@@ -262,46 +252,40 @@ void main() {
     // first. {1,5} reversed=[5,1]; {1,3} reversed=[3,1] →
     // 5 > 3 → positive.
     test('{1,5} > {1,3} because last element 5 > 3', () {
-      check(
-        intSet(<int>[1, 5]).compareToReversed(intSet(<int>[1, 3])),
-      ).isGreaterThan(0);
+      check(intSet(<int>[1, 5]).compareToReversed(intSet(<int>[1, 3])))
+          .isGreaterThan(0);
     });
 
     test('{1,2} < {1,4} because last element 2 < 4', () {
-      check(
-        intSet(<int>[1, 2]).compareToReversed(intSet(<int>[1, 4])),
-      ).isNegative();
+      check(intSet(<int>[1, 2]).compareToReversed(intSet(<int>[1, 4])))
+          .isNegative();
     });
 
     // When last elements are equal, the next-to-last pair decides.
     // {2,5} reversed=[5,2]; {3,5} reversed=[5,3] →
     // 5==5, then 2 < 3.
     test('last elements equal, second-to-last decides', () {
-      check(
-        intSet(<int>[2, 5]).compareToReversed(intSet(<int>[3, 5])),
-      ).isNegative();
+      check(intSet(<int>[2, 5]).compareToReversed(intSet(<int>[3, 5])))
+          .isNegative();
     });
 
     test('last elements equal, larger second-to-last gives positive', () {
-      check(
-        intSet(<int>[4, 5]).compareToReversed(intSet(<int>[3, 5])),
-      ).isGreaterThan(0);
+      check(intSet(<int>[4, 5]).compareToReversed(intSet(<int>[3, 5])))
+          .isGreaterThan(0);
     });
 
     // {1,2,9} reversed=[9,2,1]; {1,3,9} reversed=[9,3,1].
     // 9==9, then 2 < 3 → negative.
     test('three-element sets: tiebreak at second-to-last', () {
-      check(
-        intSet(<int>[1, 2, 9]).compareToReversed(intSet(<int>[1, 3, 9])),
-      ).isNegative();
+      check(intSet(<int>[1, 2, 9]).compareToReversed(intSet(<int>[1, 3, 9])))
+          .isNegative();
     });
 
     test('negative integers in reversed comparison', () {
       // {-3,-1} reversed=[-1,-3]; {-2,-1} reversed=[-1,-2].
       // -1==-1, then -3 < -2 → negative.
-      check(
-        intSet(<int>[-3, -1]).compareToReversed(intSet(<int>[-2, -1])),
-      ).isNegative();
+      check(intSet(<int>[-3, -1]).compareToReversed(intSet(<int>[-2, -1])))
+          .isNegative();
     });
   });
 
@@ -345,9 +329,8 @@ void main() {
     test('antisymmetry for empty vs non-empty', () {
       final SplayTreeSet<int> empty = intSet(<int>[]);
       final SplayTreeSet<int> nonEmpty = intSet(<int>[1]);
-      check(
-        empty.compareToReversed(nonEmpty).sign,
-      ).equals(-nonEmpty.compareToReversed(empty).sign);
+      check(empty.compareToReversed(nonEmpty).sign)
+          .equals(-nonEmpty.compareToReversed(empty).sign);
     });
   });
 
@@ -355,15 +338,13 @@ void main() {
     // {1,2} reversed=[2,1]; {1,2,3} reversed=[3,2,1].
     // First pair: 2 < 3 → negative.
     test('{1,2} reversed < {1,2,3} reversed (last 2 < last 3)', () {
-      check(
-        intSet(<int>[1, 2]).compareToReversed(intSet(<int>[1, 2, 3])),
-      ).isNegative();
+      check(intSet(<int>[1, 2]).compareToReversed(intSet(<int>[1, 2, 3])))
+          .isNegative();
     });
 
     test('{1,2,3} reversed > {1,2} reversed (last 3 > last 2)', () {
-      check(
-        intSet(<int>[1, 2, 3]).compareToReversed(intSet(<int>[1, 2])),
-      ).isGreaterThan(0);
+      check(intSet(<int>[1, 2, 3]).compareToReversed(intSet(<int>[1, 2])))
+          .isGreaterThan(0);
     });
   });
 
@@ -382,10 +363,8 @@ void main() {
 
     test('compareToReversed on equal string sets returns 0', () {
       check(
-        stringSet(<String>[
-          'a',
-          'b',
-        ]).compareToReversed(stringSet(<String>['a', 'b'])),
+        stringSet(<String>['a', 'b'])
+            .compareToReversed(stringSet(<String>['a', 'b'])),
       ).equals(0);
     });
 
@@ -393,29 +372,25 @@ void main() {
         '"b" > "a"', () {
       // {"a","b"} reversed=["b","a"]; {"a","a"} reversed=["a","a"].
       check(
-        stringSet(<String>[
-          'a',
-          'b',
-        ]).compareToReversed(stringSet(<String>['a', 'a'])),
+        stringSet(<String>['a', 'b'])
+            .compareToReversed(stringSet(<String>['a', 'a'])),
       ).isGreaterThan(0);
     });
 
     test('compareToReversed: {"a","c"} > {"a","b"}', () {
       check(
-        stringSet(<String>[
-          'a',
-          'c',
-        ]).compareToReversed(stringSet(<String>['a', 'b'])),
+        stringSet(<String>['a', 'c'])
+            .compareToReversed(stringSet(<String>['a', 'b'])),
       ).isGreaterThan(0);
     });
   });
 }
 
 /// Creates a [SplayTreeSet<int>] with natural ordering from [elements].
-SplayTreeSet<int> intSet(final Iterable<int> elements) =>
+SplayTreeSet<int> intSet(Iterable<int> elements) =>
     SplayTreeSet<int>.of(elements);
 
 /// Creates a [SplayTreeSet<String>] with natural ordering from
 /// [elements].
-SplayTreeSet<String> stringSet(final Iterable<String> elements) =>
+SplayTreeSet<String> stringSet(Iterable<String> elements) =>
     SplayTreeSet<String>.of(elements);

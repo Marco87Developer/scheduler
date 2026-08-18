@@ -12,32 +12,29 @@ class Time implements Comparable<Time> {
   /// The constructor will correctly calculate the hours, minutes and seconds,
   /// ensuring that the time remains within 24 hours.
   ///
-  const Time([
-    final int hours = 0,
-    final int minutes = 0,
-    final int seconds = 0,
-  ]) : _secondsSinceMidnight =
-           (hours * secondsPerHour + minutes * secondsPerMinute + seconds) %
-           secondsPerDay;
+  const Time([int hours = 0, int minutes = 0, int seconds = 0])
+    : _secondsSinceMidnight =
+          (hours * secondsPerHour + minutes * secondsPerMinute + seconds) %
+          secondsPerDay;
 
   /// Constructs a new [Time] instance from [dateTime].
   ///
-  factory Time.fromDateTime(final DateTime dateTime) =>
+  factory Time.fromDateTime(DateTime dateTime) =>
       Time(dateTime.hour, dateTime.minute, dateTime.second);
 
   /// Constructs a new [Time] instance from the [duration].
   ///
-  factory Time.fromDuration(final Duration duration) =>
+  factory Time.fromDuration(Duration duration) =>
       Time.fromSeconds(duration.inSeconds);
 
   /// Constructs a new [Time] instance from the amount of [minutes].
   ///
-  factory Time.fromMinutes(final num minutes) =>
+  factory Time.fromMinutes(num minutes) =>
       Time.fromSeconds(minutes * secondsPerMinute);
 
   /// Constructs a new [Time] instance from the amount of [seconds].
   ///
-  Time.fromSeconds(final num seconds)
+  Time.fromSeconds(num seconds)
     : _secondsSinceMidnight = seconds.round() % secondsPerDay;
 
   /// Constructs a new [Time] instance from a [formattedString].
@@ -49,7 +46,7 @@ class Time implements Comparable<Time> {
   /// * `[hh:mm:ss]`, or
   /// * `[hh:mm]`.
   ///
-  factory Time.parse(final String formattedString) {
+  factory Time.parse(String formattedString) {
     final Time? result = tryParse(formattedString);
     if (result == null) {
       throw FormatException(
@@ -105,86 +102,85 @@ class Time implements Comparable<Time> {
   /// Returns the time resulting from the multiplication of this time and the
   /// [number].
   ///
-  Time operator *(final num number) =>
+  Time operator *(num number) =>
       Time.fromSeconds(_secondsSinceMidnight * number);
 
   /// Returns the time resulting from the sum of this time and the [other] time.
   ///
-  Time operator +(final Time other) =>
+  Time operator +(Time other) =>
       Time.fromSeconds(_secondsSinceMidnight + other.inSeconds);
 
   /// Returns the time resulting from the difference between this time and the
   /// [other] time.
   ///
-  Time operator -(final Time other) =>
+  Time operator -(Time other) =>
       Time.fromSeconds(_secondsSinceMidnight - other.inSeconds);
 
   /// Returns the time resulting from the division between this time and the
   /// [number].
   ///
-  Time operator /(final num number) =>
+  Time operator /(num number) =>
       Time.fromSeconds(_secondsSinceMidnight / number);
 
   /// Returns if this time is earlier than the [other].
   ///
-  bool operator <(final Time other) => isBefore(other);
+  bool operator <(Time other) => isBefore(other);
 
   /// Returns if this time is earlier than or equal to the [other].
   ///
-  bool operator <=(final Time other) => isBeforeOrEqual(other);
+  bool operator <=(Time other) => isBeforeOrEqual(other);
 
   @override
-  bool operator ==(final Object other) =>
+  bool operator ==(Object other) =>
       identical(this, other) || (other is Time && compareTo(other) == 0);
 
   /// Returns if this time is later than the [other].
   ///
-  bool operator >(final Time other) => isAfter(other);
+  bool operator >(Time other) => isAfter(other);
 
   /// Returns if this time is later than or equal to the [other].
   ///
-  bool operator >=(final Time other) => isAfterOrEqual(other);
+  bool operator >=(Time other) => isAfterOrEqual(other);
 
   @override
-  int compareTo(final Time other) => identical(this, other)
+  int compareTo(Time other) => identical(this, other)
       ? 0
       : _secondsSinceMidnight.compareTo(other._secondsSinceMidnight);
 
   /// Creates a copy of this [Time] instance, but with the given fields replaced
   /// with the new values.
   ///
-  Time copyWith({final int? hours, final int? minutes, final int? seconds}) =>
-      Time(
-        hours ?? this.hours,
-        minutes ?? this.minutes,
-        seconds ?? this.seconds,
-      );
+  Time copyWith({int? hours, int? minutes, int? seconds}) => Time(
+    hours ?? this.hours,
+    minutes ?? this.minutes,
+    seconds ?? this.seconds,
+  );
 
   /// Returns the difference as [Duration] between this and the [other] time.
   ///
-  Duration difference(final Time other) {
+  Duration difference(Time other) {
     final int d = _secondsSinceMidnight - other._secondsSinceMidnight;
     return Duration(seconds: d);
   }
 
   /// Returns if this time is after the [other].
   ///
-  bool isAfter(final Time other) =>
+  bool isAfter(Time other) =>
       _secondsSinceMidnight > other._secondsSinceMidnight;
 
   /// Returns whether this time is after or the same as the [other].
   ///
-  bool isAfterOrEqual(final Time other) =>
+  bool isAfterOrEqual(Time other) =>
       _secondsSinceMidnight >= other._secondsSinceMidnight;
 
   /// Returns if this time is before the [other].
   ///
-  bool isBefore(final Time other) =>
+  bool isBefore(Time other) =>
       _secondsSinceMidnight < other._secondsSinceMidnight;
 
   /// Returns whether this time is before or the same as the [other].
   ///
-  bool isBeforeOrEqual(final Time other) =>
+  bool isBeforeOrEqual(Time other) =>
       _secondsSinceMidnight <= other._secondsSinceMidnight;
 
   /// Converts this time to a [Duration] since midnight.
@@ -233,21 +229,21 @@ class Time implements Comparable<Time> {
   /// If the number was a single digit, it would add a “0” to the left of the
   /// number.
   ///
-  String _timeComponentToString(final int timeComponent) =>
+  String _timeComponentToString(int timeComponent) =>
       timeComponent.toString().padLeft(2, '0');
 
   /// Returns the later time of [t1] and [t2].
   ///
-  static Time max(final Time t1, final Time t2) => t1.isAfter(t2) ? t1 : t2;
+  static Time max(Time t1, Time t2) => t1.isAfter(t2) ? t1 : t2;
 
   /// Returns the earlier time of [t1] and [t2].
   ///
-  static Time min(final Time t1, final Time t2) => t1.isBefore(t2) ? t1 : t2;
+  static Time min(Time t1, Time t2) => t1.isBefore(t2) ? t1 : t2;
 
   /// Safely parses a [formattedString] into a [Time] instance, returning `null`
   /// if the format is invalid.
   ///
-  static Time? tryParse(final String formattedString) {
+  static Time? tryParse(String formattedString) {
     final String noWhiteSpaces = formattedString.removeAllWhitespace();
     final List<String> timeComponents = noWhiteSpaces.startsWith('T')
         ? noWhiteSpaces.substring(1).split(':')

@@ -31,8 +31,8 @@ class ServiceReport implements Comparable<ServiceReport> {
     this.comments = '',
     this.hourCredit,
     this.hours,
-    required final int month,
-    required final bool sharedMinistry,
+    required int month,
+    required bool sharedMinistry,
     required this.year,
   }) : month = month % 12 == 0 ? 12 : month % 12,
        sharedMinistry =
@@ -40,7 +40,7 @@ class ServiceReport implements Comparable<ServiceReport> {
 
   /// Constructs a new [ServiceReport] instance based on [json].
   ///
-  factory ServiceReport.fromJson(final String json) {
+  factory ServiceReport.fromJson(String json) {
     final FormatException invalid = FormatException(
       fromJsonFormatExceptionMessage(className, json),
       json,
@@ -63,7 +63,7 @@ class ServiceReport implements Comparable<ServiceReport> {
 
   /// Constructs a new [ServiceReport] instance based on [map].
   ///
-  ServiceReport.fromMap(final Map<String, Object?> map)
+  ServiceReport.fromMap(Map<String, Object?> map)
     : this(
         bibleStudies: parseInt(
           className: className,
@@ -93,7 +93,7 @@ class ServiceReport implements Comparable<ServiceReport> {
 
   /// Constructs a new [ServiceReport] instance from a [formattedString].
   ///
-  factory ServiceReport.parse(final String formattedString) {
+  factory ServiceReport.parse(String formattedString) {
     final FormatException invalid = FormatException(
       parseFormatExceptionMessage(className, formattedString),
       formattedString,
@@ -211,29 +211,29 @@ class ServiceReport implements Comparable<ServiceReport> {
 
   /// Returns if this service report comes before the [other].
   ///
-  bool operator <(final ServiceReport other) => compareTo(other) < 0;
+  bool operator <(ServiceReport other) => compareTo(other) < 0;
 
   /// Returns if this service report comes before or is equal to the
   /// [other].
   ///
-  bool operator <=(final ServiceReport other) => compareTo(other) <= 0;
+  bool operator <=(ServiceReport other) => compareTo(other) <= 0;
 
   @override
-  bool operator ==(final Object other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ServiceReport && compareTo(other) == 0);
 
   /// Returns if this service report comes after the [other].
   ///
-  bool operator >(final ServiceReport other) => compareTo(other) > 0;
+  bool operator >(ServiceReport other) => compareTo(other) > 0;
 
   /// Returns if this service report comes after or is equal to the
   /// [other].
   ///
-  bool operator >=(final ServiceReport other) => compareTo(other) >= 0;
+  bool operator >=(ServiceReport other) => compareTo(other) >= 0;
 
   @override
-  int compareTo(final ServiceReport other) {
+  int compareTo(ServiceReport other) {
     if (identical(this, other)) {
       return 0;
     }
@@ -277,13 +277,13 @@ class ServiceReport implements Comparable<ServiceReport> {
   /// fields replaced with the new values.
   ///
   ServiceReport copyWith({
-    final int? bibleStudies,
-    final String? comments,
-    final HourCredit? Function()? hourCredit,
-    final int? Function()? hours,
-    final int? month,
-    final bool? sharedMinistry,
-    final int? year,
+    int? bibleStudies,
+    String? comments,
+    HourCredit? Function()? hourCredit,
+    int? Function()? hours,
+    int? month,
+    bool? sharedMinistry,
+    int? year,
   }) => ServiceReport(
     bibleStudies: bibleStudies ?? this.bibleStudies,
     comments: comments ?? this.comments,

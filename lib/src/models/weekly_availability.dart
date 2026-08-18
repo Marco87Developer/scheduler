@@ -19,7 +19,7 @@ class WeeklyAvailability implements Comparable<WeeklyAvailability> {
   /// If [end] is earlier than [start], the two values are silently swapped so
   /// that [start] is always before or coincides with [end].
   ///
-  const WeeklyAvailability(this.day, final Time start, final Time end)
+  const WeeklyAvailability(this.day, Time start, Time end)
     : start = start < end ? start : end,
       end = end >= start ? end : start;
 
@@ -28,7 +28,7 @@ class WeeklyAvailability implements Comparable<WeeklyAvailability> {
   /// Throws [FormatException] if [json] is not valid JSON or does not represent
   /// a `Map<String, Object?>` with the expected keys.
   ///
-  factory WeeklyAvailability.fromJson(final String json) {
+  factory WeeklyAvailability.fromJson(String json) {
     final FormatException invalid = FormatException(
       fromJsonFormatExceptionMessage(className, json),
       json,
@@ -49,7 +49,7 @@ class WeeklyAvailability implements Comparable<WeeklyAvailability> {
   /// Throws [FormatException] if any required key is absent or has an
   /// incompatible type.
   ///
-  WeeklyAvailability.fromMap(final Map<String, Object?> map)
+  WeeklyAvailability.fromMap(Map<String, Object?> map)
     : this(
         parseClass<DayOfWeek, String>(
           className: className,
@@ -77,7 +77,7 @@ class WeeklyAvailability implements Comparable<WeeklyAvailability> {
   /// Throws [FormatException] if the string does not have exactly three
   /// pipe-separated segments or any segment cannot be parsed.
   ///
-  factory WeeklyAvailability.parse(final String formattedString) {
+  factory WeeklyAvailability.parse(String formattedString) {
     final FormatException invalid = FormatException(
       parseFormatExceptionMessage(className, formattedString),
       formattedString,
@@ -114,29 +114,29 @@ class WeeklyAvailability implements Comparable<WeeklyAvailability> {
 
   /// Returns if this weekly availability comes before the [other].
   ///
-  bool operator <(final WeeklyAvailability other) => compareTo(other) < 0;
+  bool operator <(WeeklyAvailability other) => compareTo(other) < 0;
 
   /// Returns if this weekly availability comes before the or is equal to the
   /// [other].
   ///
-  bool operator <=(final WeeklyAvailability other) => compareTo(other) <= 0;
+  bool operator <=(WeeklyAvailability other) => compareTo(other) <= 0;
 
   @override
-  bool operator ==(final Object other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is WeeklyAvailability && compareTo(other) == 0);
 
   /// Returns if this weekly availability comes after the [other].
   ///
-  bool operator >(final WeeklyAvailability other) => compareTo(other) > 0;
+  bool operator >(WeeklyAvailability other) => compareTo(other) > 0;
 
   /// Returns if this weekly availability comes after the or is equal to the
   /// [other].
   ///
-  bool operator >=(final WeeklyAvailability other) => compareTo(other) >= 0;
+  bool operator >=(WeeklyAvailability other) => compareTo(other) >= 0;
 
   @override
-  int compareTo(final WeeklyAvailability other) {
+  int compareTo(WeeklyAvailability other) {
     if (identical(this, other)) {
       return 0;
     }
@@ -154,11 +154,7 @@ class WeeklyAvailability implements Comparable<WeeklyAvailability> {
   /// Creates a copy of this [WeeklyAvailability] instance, but with the given
   /// fields replaced with the new values.
   ///
-  WeeklyAvailability copyWith({
-    final DayOfWeek? day,
-    final Time? end,
-    final Time? start,
-  }) =>
+  WeeklyAvailability copyWith({DayOfWeek? day, Time? end, Time? start}) =>
       WeeklyAvailability(day ?? this.day, start ?? this.start, end ?? this.end);
 
   /// Returns a JSON string representing this instance of [WeeklyAvailability].

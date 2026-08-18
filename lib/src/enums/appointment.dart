@@ -12,7 +12,7 @@ enum Appointment implements Comparable<Appointment> {
 
   /// Constructs a new [Appointment] instance from a [formattedString].
   ///
-  factory Appointment.parse(final String formattedString) {
+  factory Appointment.parse(String formattedString) {
     final String lowerNoWhiteSpaces = formattedString
         .removeAllWhitespace()
         .toLowerCase();
@@ -32,25 +32,25 @@ enum Appointment implements Comparable<Appointment> {
   /// Returns if this appointment comes before the [other] in alphabetical
   /// order.
   ///
-  bool operator <(covariant final Appointment other) => compareTo(other) < 0;
+  bool operator <(covariant Appointment other) => compareTo(other) < 0;
 
   /// Returns if this appointment comes before or is equal to the [other] in
   /// alphabetical order.
   ///
-  bool operator <=(covariant final Appointment other) => compareTo(other) <= 0;
+  bool operator <=(covariant Appointment other) => compareTo(other) <= 0;
 
   /// Returns if this appointment comes after the [other] in alphabetical
   /// order.
   ///
-  bool operator >(covariant final Appointment other) => compareTo(other) > 0;
+  bool operator >(covariant Appointment other) => compareTo(other) > 0;
 
   /// Returns if this appointment comes after or is equal to the [other] in
   /// alphabetical order.
   ///
-  bool operator >=(covariant final Appointment other) => compareTo(other) >= 0;
+  bool operator >=(covariant Appointment other) => compareTo(other) >= 0;
 
   @override
-  int compareTo(covariant final Appointment other) =>
+  int compareTo(covariant Appointment other) =>
       identical(this, other) ? 0 : name.compareTo(other.name);
 
   @override

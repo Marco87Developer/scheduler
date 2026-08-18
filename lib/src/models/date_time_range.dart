@@ -22,13 +22,13 @@ const String _startKey = 'start';
 class DateTimeRange implements Comparable<DateTimeRange> {
   /// Constructs a new [DateTimeRange] instance from the two given dates.
   ///
-  DateTimeRange(final DateTime dt1, final DateTime dt2)
+  DateTimeRange(DateTime dt1, DateTime dt2)
     : start = minDateTime(dt1, dt2),
       end = maxDateTime(dt1, dt2);
 
   /// Constructs a new [DateTimeRange] instance based on [json].
   ///
-  factory DateTimeRange.fromJson(final String json) {
+  factory DateTimeRange.fromJson(String json) {
     final Object? decoded;
     try {
       decoded = jsonDecode(json);
@@ -57,7 +57,7 @@ class DateTimeRange implements Comparable<DateTimeRange> {
 
   /// Constructs a new [DateTimeRange] instance based on [map].
   ///
-  DateTimeRange.fromMap(final Map<String, Object?> map)
+  DateTimeRange.fromMap(Map<String, Object?> map)
     : this(
         parseClass<DateTime, String>(
           className: className,
@@ -75,7 +75,7 @@ class DateTimeRange implements Comparable<DateTimeRange> {
 
   /// Constructs a new [DateTimeRange] instance from a [formattedString].
   ///
-  factory DateTimeRange.parse(final String formattedString) {
+  factory DateTimeRange.parse(String formattedString) {
     if (formattedString.trim().split('|') case [
       final String stringStart,
       final String stringEnd,
@@ -115,17 +115,17 @@ class DateTimeRange implements Comparable<DateTimeRange> {
   /// are the same, the [end] of this date time range is before the end of the
   /// [other] date time range.
   ///
-  bool operator <(final DateTimeRange other) => compareTo(other) < 0;
+  bool operator <(DateTimeRange other) => compareTo(other) < 0;
 
   /// Returns whether the [start] of this date time range is before the start of
   /// the [other] date time range. Or whether, in the case where the two starts
   /// are the same, the [end] of this date time range is before or coincides
   /// with the end of the [other] date time range.
   ///
-  bool operator <=(final DateTimeRange other) => compareTo(other) <= 0;
+  bool operator <=(DateTimeRange other) => compareTo(other) <= 0;
 
   @override
-  bool operator ==(final Object other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is DateTimeRange && compareTo(other) == 0);
 
@@ -134,17 +134,17 @@ class DateTimeRange implements Comparable<DateTimeRange> {
   /// are the same, the [end] of this date time range is after the end of the
   /// [other] date time range.
   ///
-  bool operator >(final DateTimeRange other) => compareTo(other) > 0;
+  bool operator >(DateTimeRange other) => compareTo(other) > 0;
 
   /// Returns whether the [start] of this date time range is after the start of
   /// the [other] date time range. Or whether, in the case where the two starts
   /// are the same, the [end] of this date time range is after or coincides
   /// with the end of the [other] date time range.
   ///
-  bool operator >=(final DateTimeRange other) => compareTo(other) >= 0;
+  bool operator >=(DateTimeRange other) => compareTo(other) >= 0;
 
   @override
-  int compareTo(final DateTimeRange other) {
+  int compareTo(DateTimeRange other) {
     if (identical(this, other)) {
       return 0;
     }
@@ -164,31 +164,31 @@ class DateTimeRange implements Comparable<DateTimeRange> {
   /// Creates a copy of this [DateTimeRange] instance, but with the given fields
   /// replaced with the new values.
   ///
-  DateTimeRange copyWith({final DateTime? end, final DateTime? start}) =>
+  DateTimeRange copyWith({DateTime? end, DateTime? start}) =>
       DateTimeRange(start ?? this.start, end ?? this.end);
 
   /// Returns if this date time range ends before or on the start of the
   /// [other].
   ///
-  bool endsBeforeOrAtStart(final DateTimeRange other) =>
+  bool endsBeforeOrAtStart(DateTimeRange other) =>
       end.isBefore(other.start) || end.isAtSameMomentAs(other.start);
 
   /// Returns if this date time range ends before the start of the [other].
   ///
-  bool endsBeforeStart(final DateTimeRange other) => end.isBefore(other.start);
+  bool endsBeforeStart(DateTimeRange other) => end.isBefore(other.start);
 
   /// Returns if this date time range overlaps with or touches the [other].
   ///
-  bool overlapsOrTouches(final DateTimeRange other) =>
+  bool overlapsOrTouches(DateTimeRange other) =>
       !(start.isAfter(other.end) || end.isBefore(other.start));
 
   /// Returns if this date time range starts after the end of the [other].
   ///
-  bool startsAfterEnds(final DateTimeRange other) => start.isAfter(other.end);
+  bool startsAfterEnds(DateTimeRange other) => start.isAfter(other.end);
 
   /// Returns if this date time range starts after or on the end of the [other].
   ///
-  bool startsAfterOrAtEnd(final DateTimeRange other) =>
+  bool startsAfterOrAtEnd(DateTimeRange other) =>
       start.isAfter(other.end) || start.isAtSameMomentAs(other.end);
 
   /// Returns a JSON string representing this instance of [DateTimeRange].
@@ -207,7 +207,7 @@ class DateTimeRange implements Comparable<DateTimeRange> {
 
   /// Returns if there are overlapping ranges within the [ranges].
   ///
-  static bool areThereOverlaps(final SplayTreeSet<DateTimeRange> ranges) {
+  static bool areThereOverlaps(SplayTreeSet<DateTimeRange> ranges) {
     if (ranges.length < 2) {
       return false;
     } else {
@@ -247,8 +247,8 @@ class DateTimeRange implements Comparable<DateTimeRange> {
   /// accordance with the [compareTo] method).
   ///
   static SplayTreeSet<DateTimeRange> join(
-    final DateTimeRange dtr1,
-    final DateTimeRange dtr2,
+    DateTimeRange dtr1,
+    DateTimeRange dtr2,
   ) {
     if (dtr1.overlapsOrTouches(dtr2)) {
       return SplayTreeSet<DateTimeRange>()..add(
@@ -272,9 +272,7 @@ class DateTimeRange implements Comparable<DateTimeRange> {
   ///
   /// Returns an empty set if no ranges are provided.
   ///
-  static SplayTreeSet<DateTimeRange> merge(
-    final Iterable<DateTimeRange> ranges,
-  ) {
+  static SplayTreeSet<DateTimeRange> merge(Iterable<DateTimeRange> ranges) {
     if (ranges.isEmpty) {
       return SplayTreeSet<DateTimeRange>();
     }

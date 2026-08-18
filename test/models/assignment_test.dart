@@ -181,7 +181,7 @@ void main() {
         () => Assignment.fromJson('{not valid json'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('Assignment'),
           ),
@@ -258,7 +258,7 @@ void main() {
         () => Assignment.parse(''),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.message,
+            (FormatException e) => e.message,
             'message',
             contains('Assignment'),
           ),
@@ -271,7 +271,7 @@ void main() {
         () => Assignment.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (final FormatException e) => e.source,
+            (FormatException e) => e.source,
             'source',
             equals('invalid'),
           ),
@@ -738,7 +738,7 @@ void main() {
         end: later,
       );
       final List<Assignment> sorted = List<Assignment>.from(<Assignment>[a, b])
-        ..sort((final Assignment x, final Assignment y) => x.compareTo(y));
+        ..sort((Assignment x, Assignment y) => x.compareTo(y));
       expect(sorted, equals(<Assignment>[b, a]));
     });
   });

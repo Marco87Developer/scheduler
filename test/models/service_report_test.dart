@@ -179,7 +179,7 @@ void main() {
       );
       check(() => ServiceReport.fromJson(badJson))
           .throws<FormatException>()
-          .has((final FormatException e) => e.message, 'message')
+          .has((FormatException e) => e.message, 'message')
           .equals(expected);
     });
     test('throws a FormatException when the JSON is not an object', () {
@@ -190,7 +190,7 @@ void main() {
       );
       check(() => ServiceReport.fromJson(arrayJson))
           .throws<FormatException>()
-          .has((final FormatException e) => e.message, 'message')
+          .has((FormatException e) => e.message, 'message')
           .equals(expected);
     });
     test('throws a FormatException using the fromJson message when the '
@@ -202,7 +202,7 @@ void main() {
       );
       check(() => ServiceReport.fromJson(json))
           .throws<FormatException>()
-          .has((final FormatException e) => e.message, 'message')
+          .has((FormatException e) => e.message, 'message')
           .equals(expected);
     });
   });
@@ -251,7 +251,7 @@ void main() {
       );
       check(() => ServiceReport.fromMap(map))
           .throws<FormatException>()
-          .has((final FormatException e) => e.message, 'message')
+          .has((FormatException e) => e.message, 'message')
           .equals(expected);
     });
     for (final String key in <String>[
@@ -269,7 +269,7 @@ void main() {
         );
         check(() => ServiceReport.fromMap(map))
             .throws<FormatException>()
-            .has((final FormatException e) => e.message, 'message')
+            .has((FormatException e) => e.message, 'message')
             .equals(expected);
       });
     }
@@ -321,7 +321,7 @@ void main() {
       );
       check(() => ServiceReport.parse(formattedString))
           .throws<FormatException>()
-          .has((final FormatException e) => e.message, 'message')
+          .has((FormatException e) => e.message, 'message')
           .equals(expected);
     });
     test('throws a FormatException for a non-numeric year', () {
@@ -332,7 +332,7 @@ void main() {
       );
       check(() => ServiceReport.parse(formattedString))
           .throws<FormatException>()
-          .has((final FormatException e) => e.message, 'message')
+          .has((FormatException e) => e.message, 'message')
           .equals(expected);
     });
     test('throws a FormatException for an invalid boolean', () {
@@ -343,7 +343,7 @@ void main() {
       );
       check(() => ServiceReport.parse(formattedString))
           .throws<FormatException>()
-          .has((final FormatException e) => e.message, 'message')
+          .has((FormatException e) => e.message, 'message')
           .equals(expected);
     });
   });
@@ -761,9 +761,8 @@ void main() {
         sharedMinistry: false,
         year: 2024,
       );
-      check(
-        report.toString(),
-      ).equals('2024|5|true|2|$sampleHourCredit|10|Note');
+      check(report.toString())
+          .equals('2024|5|true|2|$sampleHourCredit|10|Note');
     });
     test('prints "null" for a missing hourCredit and hours', () {
       const ServiceReport report = ServiceReport(
