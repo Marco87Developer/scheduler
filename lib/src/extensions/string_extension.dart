@@ -1,5 +1,6 @@
+import 'package:meta/meta.dart';
+
 /// Extension methods on the [String] class.
-///
 extension StringExtension on String {
   /// Whitespace regular expression (with Unicode support).
   static final RegExp _whitespaceRegExp = RegExp(r'\s+', unicode: true);
@@ -10,8 +11,8 @@ extension StringExtension on String {
   ///
   /// Useful for normalizing user input where multiple consecutive spaces, tabs,
   /// or newlines should be collapsed into one.
-  ///
-  String collapseWhitespace() => replaceAll(_whitespaceRegExp, ' ').trim();
+  @useResult
+  String collapseWhitespace() => trim().replaceAll(_whitespaceRegExp, ' ');
 
   /// Returns a string obtained by removing all whitespace characters from this
   /// string.
@@ -27,6 +28,6 @@ extension StringExtension on String {
   ///
   /// Uses a regular expression `\s+` that matches one or more consecutive
   /// whitespace characters, ensuring efficient removal of whitespace sequences.
-  ///
+  @useResult
   String removeAllWhitespace() => replaceAll(_whitespaceRegExp, '');
 }
