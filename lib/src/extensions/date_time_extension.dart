@@ -1,10 +1,8 @@
 /// Returns the date that comes after between [dateTime1] and [dateTime2].
-///
 DateTime maxDateTime(DateTime dateTime1, DateTime dateTime2) =>
     dateTime1.isAfter(dateTime2) ? dateTime1 : dateTime2;
 
 /// Returns the date that comes before between [dateTime1] and [dateTime2].
-///
 DateTime minDateTime(DateTime dateTime1, DateTime dateTime2) =>
     dateTime1.isBefore(dateTime2) ? dateTime1 : dateTime2;
 
@@ -14,29 +12,23 @@ DateTime minDateTime(DateTime dateTime1, DateTime dateTime2) =>
 ///
 /// This extension provides type-safe, performant utilities for common date
 /// comparison scenarios.
-///
 extension DateTimeExtension on DateTime {
-  /// Returns if this date is after or at the same moment as the [other] one.
-  ///
-  bool isAfterOrAtSameMomentAs(DateTime other) =>
-      isAfter(other) || isAtSameMomentAs(other);
+  /// Whether this date is after or at the same moment as [other].
+  bool isAfterOrAtSameMomentAs(DateTime other) => !isBefore(other);
 
-  /// Returns if this date is before or at the same moment as the [other] one.
-  ///
-  bool isBeforeOrAtSameMomentAs(DateTime other) =>
-      isBefore(other) || isAtSameMomentAs(other);
+  /// Whether this date is before or at the same moment as [other].
+  bool isBeforeOrAtSameMomentAs(DateTime other) => !isAfter(other);
 
-  /// Returns if this date is strictly between the two given dates.
-  ///
+  /// Whether this date is strictly between the two given dates.
   bool isBetween(DateTime dateTime1, DateTime dateTime2) =>
-      isAfter(minDateTime(dateTime1, dateTime2)) &&
-      isBefore(maxDateTime(dateTime1, dateTime2));
+      (isAfter(dateTime1) && isBefore(dateTime2)) ||
+      (isAfter(dateTime2) && isBefore(dateTime1));
 
-  /// Returns whether this date is between the two given dates or if it is at
-  /// the same moment as one of them.
-  ///
+  /// Whether this date is between the two given dates or if it is at the same
+  /// moment as one of them.
   bool isBetweenOrAtSameMomentAs(DateTime dateTime1, DateTime dateTime2) =>
-      isBetween(dateTime1, dateTime2) ||
-      isAtSameMomentAs(dateTime1) ||
-      isAtSameMomentAs(dateTime2);
+      (isAfterOrAtSameMomentAs(dateTime1) &&
+          isBeforeOrAtSameMomentAs(dateTime2)) ||
+      (isAfterOrAtSameMomentAs(dateTime2) &&
+          isBeforeOrAtSameMomentAs(dateTime1));
 }
