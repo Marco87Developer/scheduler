@@ -23,19 +23,6 @@ enum Appointment implements Comparable<Appointment> {
         parseFormatExceptionMessage(enumName, formattedString),
         formattedString,
       ));
-  // factory parse(String formattedString) {
-  //   final String lowerNoWhiteSpaces = formattedString
-  //       .removeAllWhitespace()
-  //       .toLowerCase();
-  //   return switch (lowerNoWhiteSpaces) {
-  //     'elder' || 'e' => .elder,
-  //     'ministerialservant' || 'ms' => .ministerialservant,
-  //     _ => throw FormatException(
-  //       parseFormatExceptionMessage(enumName, formattedString),
-  //       formattedString,
-  //     ),
-  //   };
-  // }
 
   /// The name of this enum.
   static const String enumName = 'Appointment';
