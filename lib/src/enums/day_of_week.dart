@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:scheduler/src/exceptions/exception_messages.dart';
 import 'package:scheduler/src/extensions/string_extension.dart';
 
@@ -72,6 +73,7 @@ enum DayOfWeek(
 
   /// Parses [formattedString] like [DayOfWeek.parse], but returns `null`
   /// instead of throwing when it does not match any day of the week.
+  @useResult
   static DayOfWeek? tryParse(String formattedString) {
     final String lowerNoWhiteSpaces = formattedString
         .removeAllWhitespace()
