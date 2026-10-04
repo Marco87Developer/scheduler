@@ -5,13 +5,13 @@ import 'package:test/scaffolding.dart';
 void main() {
   group('elementCompareIterables', () {
     test('returns 0 for identical instances', () {
-      final List<num> a = <num>[1, 2, 3];
+      final a = <num>[1, 2, 3];
       check(elementCompareIterables<num>(a, a)).equals(0);
     });
 
     test('returns 0 for equal non-identical iterables', () {
-      final List<num> a = <num>[1, 2, 3];
-      final List<num> b = <num>[1, 2, 3];
+      final a = <num>[1, 2, 3];
+      final b = <num>[1, 2, 3];
       check(elementCompareIterables<num>(a, b)).equals(0);
     });
 
@@ -20,32 +20,32 @@ void main() {
     });
 
     test('returns positive when a differs and is greater', () {
-      final List<num> a = <num>[1, 5, 3];
-      final List<num> b = <num>[1, 2, 3];
+      final a = <num>[1, 5, 3];
+      final b = <num>[1, 2, 3];
       check(elementCompareIterables<num>(a, b)).isGreaterThan(0);
     });
 
     test('returns negative when b differs and is greater', () {
-      final List<num> a = <num>[1, 2, 3];
-      final List<num> b = <num>[1, 5, 3];
+      final a = <num>[1, 2, 3];
+      final b = <num>[1, 5, 3];
       check(elementCompareIterables<num>(a, b)).isNegative();
     });
 
     test('stops at first differing pair, ignoring later elements', () {
-      final List<num> a = <num>[1, 9, 100];
-      final List<num> b = <num>[1, 2, 3];
+      final a = <num>[1, 9, 100];
+      final b = <num>[1, 2, 3];
       check(elementCompareIterables<num>(a, b)).isGreaterThan(0);
     });
 
     test('returns positive when a is longer with equal prefix', () {
-      final List<num> a = <num>[1, 2, 3];
-      final List<num> b = <num>[1, 2];
+      final a = <num>[1, 2, 3];
+      final b = <num>[1, 2];
       check(elementCompareIterables<num>(a, b)).equals(1);
     });
 
     test('returns negative when b is longer with equal prefix', () {
-      final List<num> a = <num>[1, 2];
-      final List<num> b = <num>[1, 2, 3];
+      final a = <num>[1, 2];
+      final b = <num>[1, 2, 3];
       check(elementCompareIterables<num>(a, b)).equals(-1);
     });
 
@@ -65,7 +65,7 @@ void main() {
 
     test('works with non-List iterables (e.g. Set, Iterable views)', () {
       final Iterable<num> a = <num>{1, 2, 3};
-      final Iterable<num> b = <num>[1, 2, 3].map((num e) => e);
+      final Iterable<num> b = <num>[1, 2, 3].map((e) => e);
       check(elementCompareIterables<num>(a, b)).equals(0);
     });
 
@@ -77,13 +77,13 @@ void main() {
 
   group('elementCompareIterablesReversed', () {
     test('returns 0 for identical instances', () {
-      final List<num> a = <num>[1, 2, 3];
+      final a = <num>[1, 2, 3];
       check(elementCompareIterablesReversed<num>(a, a)).equals(0);
     });
 
     test('returns 0 for equal non-identical lists', () {
-      final List<num> a = <num>[1, 2, 3];
-      final List<num> b = <num>[1, 2, 3];
+      final a = <num>[1, 2, 3];
+      final b = <num>[1, 2, 3];
       check(elementCompareIterablesReversed<num>(a, b)).equals(0);
     });
 
@@ -92,8 +92,8 @@ void main() {
     });
 
     test('compares from the end: differing last elements', () {
-      final List<num> a = <num>[1, 2, 9];
-      final List<num> b = <num>[1, 2, 3];
+      final a = <num>[1, 2, 9];
+      final b = <num>[1, 2, 3];
       check(elementCompareIterablesReversed<num>(a, b)).isGreaterThan(0);
     });
 
@@ -102,20 +102,20 @@ void main() {
       // Reversed comparison looks at the tail first: last elements
       // differ (9 vs 3), so that decides the result regardless of
       // the first elements.
-      final List<num> a = <num>[9, 2, 3];
-      final List<num> b = <num>[1, 2, 9];
+      final a = <num>[9, 2, 3];
+      final b = <num>[1, 2, 9];
       check(elementCompareIterablesReversed<num>(a, b)).isNegative();
     });
 
     test('returns positive when a is longer with equal suffix', () {
-      final List<num> a = <num>[0, 1, 2, 3];
-      final List<num> b = <num>[1, 2, 3];
+      final a = <num>[0, 1, 2, 3];
+      final b = <num>[1, 2, 3];
       check(elementCompareIterablesReversed<num>(a, b)).equals(1);
     });
 
     test('returns negative when b is longer with equal suffix', () {
-      final List<num> a = <num>[1, 2, 3];
-      final List<num> b = <num>[0, 1, 2, 3];
+      final a = <num>[1, 2, 3];
+      final b = <num>[0, 1, 2, 3];
       check(elementCompareIterablesReversed<num>(a, b)).equals(-1);
     });
 
@@ -128,28 +128,27 @@ void main() {
     });
 
     test('works with a non-List Iterable input for a', () {
-      final Iterable<num> a = <num>[1, 2, 3].map((num e) => e);
-      final List<num> b = <num>[1, 2, 3];
+      final Iterable<num> a = <num>[1, 2, 3].map((e) => e);
+      final b = <num>[1, 2, 3];
       check(elementCompareIterablesReversed<num>(a, b)).equals(0);
     });
 
     test('works with a non-List Iterable input for b', () {
-      final List<num> a = <num>[1, 2, 3];
-      final Iterable<num> b = <num>[1, 2, 3].map((num e) => e);
+      final a = <num>[1, 2, 3];
+      final Iterable<num> b = <num>[1, 2, 3].map((e) => e);
       check(elementCompareIterablesReversed<num>(a, b)).equals(0);
     });
 
     test('works with Set inputs for both a and b', () {
-      final Set<num> a = <num>{1, 2, 3};
-      final Set<num> b = <num>{1, 2, 3};
+      final a = <num>{1, 2, 3};
+      final b = <num>{1, 2, 3};
       check(elementCompareIterablesReversed<num>(a, b)).equals(0);
     });
 
     test('single-element iterables compare correctly', () {
       check(elementCompareIterablesReversed<num>(<num>[5], <num>[5])).equals(0);
-      check(
-        elementCompareIterablesReversed<num>(<num>[5], <num>[6]),
-      ).isNegative();
+      check(elementCompareIterablesReversed<num>(<num>[5], <num>[6]))
+          .isNegative();
     });
 
     test('works with String elements', () {
@@ -159,6 +158,102 @@ void main() {
           <String>['b', 'z'],
         ),
       ).isNegative();
+    });
+  });
+
+  group('elementCompareIterables', () {
+    test('returns 0 for identical iterables', () {
+      final list = <int>[1, 2, 3];
+      check(elementCompareIterables(list, list)).equals(0);
+    });
+    test('returns 0 for equal iterables of same length', () {
+      final a = <int>[1, 2, 3];
+      final b = <int>[1, 2, 3];
+      check(elementCompareIterables(a, b)).equals(0);
+    });
+    test('returns positive when a has greater element', () {
+      final a = <int>[1, 3, 3];
+      final b = <int>[1, 2, 3];
+      check(elementCompareIterables(a, b)).isGreaterThan(0);
+    });
+    test('returns negative when b has greater element', () {
+      final a = <int>[1, 2, 3];
+      final b = <int>[1, 3, 3];
+      check(elementCompareIterables(a, b)).isNegative();
+    });
+    test('returns positive when a is longer', () {
+      final a = <int>[1, 2, 3, 4];
+      final b = <int>[1, 2, 3];
+      check(elementCompareIterables(a, b)).isGreaterThan(0);
+    });
+    test('returns negative when b is longer', () {
+      final a = <int>[1, 2, 3];
+      final b = <int>[1, 2, 3, 4];
+      check(elementCompareIterables(a, b)).isNegative();
+    });
+    test('handles empty iterables correctly', () {
+      final List<int> empty1 = [];
+      final List<int> empty2 = [];
+      final nonEmpty = <int>[1];
+      check(elementCompareIterables(empty1, empty2)).equals(0);
+      check(elementCompareIterables(empty1, nonEmpty)).isNegative();
+      check(elementCompareIterables(nonEmpty, empty1)).isGreaterThan(0);
+    });
+    test('works with non-List iterables', () {
+      final a = <int>{1, 2, 3};
+      final b = <int>{1, 2, 3};
+      final c = <int>{1, 2, 4};
+      final d = <int>{1, 2};
+      check(elementCompareIterables(a, b)).equals(0);
+      check(elementCompareIterables(a, c)).isNegative();
+      check(elementCompareIterables(a, d)).isGreaterThan(0);
+    });
+  });
+
+  group('elementCompareIterablesReversed', () {
+    test('returns 0 for identical iterables', () {
+      final list = <int>[1, 2, 3];
+      check(elementCompareIterablesReversed(list, list)).equals(0);
+    });
+    test('returns 0 for equal iterables of same length', () {
+      final a = <int>[1, 2, 3];
+      final b = <int>[1, 2, 3];
+      check(elementCompareIterablesReversed(a, b)).equals(0);
+    });
+    test('returns positive when a has greater element from end', () {
+      final a = <int>[1, 3, 2];
+      final b = <int>[1, 2, 2];
+      check(elementCompareIterablesReversed(a, b)).isGreaterThan(0);
+    });
+    test('returns negative when b has greater element from end', () {
+      final a = <int>[1, 2, 2];
+      final b = <int>[1, 3, 2];
+      check(elementCompareIterablesReversed(a, b)).isNegative();
+    });
+    test('returns positive when a is longer', () {
+      final a = <int>[0, 1, 2, 3];
+      final b = <int>[1, 2, 3];
+      check(elementCompareIterablesReversed(a, b)).isGreaterThan(0);
+    });
+    test('returns negative when b is longer', () {
+      final a = <int>[1, 2, 3];
+      final b = <int>[0, 1, 2, 3];
+      check(elementCompareIterablesReversed(a, b)).isNegative();
+    });
+    test('handles empty iterables correctly', () {
+      final List<int> emptyA = [];
+      final List<int> emptyB = [];
+      final nonEmpty = <int>[1];
+      check(elementCompareIterablesReversed(emptyA, emptyB)).equals(0);
+      check(elementCompareIterablesReversed(emptyA, nonEmpty)).isNegative();
+      check(elementCompareIterablesReversed(nonEmpty, emptyA)).isGreaterThan(0);
+    });
+    test('works with non-List iterables', () {
+      final Iterable<int> a = {1, 2, 3};
+      final Iterable<int> b = {1, 2, 4};
+      final Iterable<int> c = {2, 3};
+      check(elementCompareIterablesReversed(a, b)).isNegative();
+      check(elementCompareIterablesReversed(a, c)).isGreaterThan(0);
     });
   });
 }
