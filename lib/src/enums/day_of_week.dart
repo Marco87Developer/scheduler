@@ -51,24 +51,30 @@ enum DayOfWeek(
   static const String enumName = 'DayOfWeek';
 
   /// Whether this day of the week comes before [other] during the week.
+  @useResult
   bool operator <(DayOfWeek other) => compareTo(other) < 0;
 
   /// Whether this day of the week comes before [other] during the week or if
   /// it is the same day of the week.
+  @useResult
   bool operator <=(DayOfWeek other) => compareTo(other) <= 0;
 
   /// Whether this day of the week comes after [other] during the week.
+  @useResult
   bool operator >(DayOfWeek other) => compareTo(other) > 0;
 
   /// Whether this day of the week comes after [other] during the week or if it
   /// is the same day of the week.
+  @useResult
   bool operator >=(DayOfWeek other) => compareTo(other) >= 0;
 
   @override
+  @useResult
   int compareTo(DayOfWeek other) =>
       identical(this, other) ? 0 : number.compareTo(other.number);
 
   @override
+  @useResult
   String toString() => name;
 
   /// Parses [formattedString] like [DayOfWeek.parse], but returns `null`

@@ -30,21 +30,21 @@ enum Appointment implements Comparable<Appointment> {
 
   /// Whether this appointment comes before the [other] in alphabetical order.
   @useResult
-  bool operator <(covariant Appointment other) => compareTo(other) < 0;
+  bool operator <(Appointment other) => compareTo(other) < 0;
 
   /// Whether this appointment comes before or is equal to the [other] in
   /// alphabetical order.
   @useResult
-  bool operator <=(covariant Appointment other) => compareTo(other) <= 0;
+  bool operator <=(Appointment other) => compareTo(other) <= 0;
 
   /// Whether this appointment comes after the [other] in alphabetical order.
   @useResult
-  bool operator >(covariant Appointment other) => compareTo(other) > 0;
+  bool operator >(Appointment other) => compareTo(other) > 0;
 
   /// Whether this appointment comes after or is equal to the [other] in
   /// alphabetical order.
   @useResult
-  bool operator >=(covariant Appointment other) => compareTo(other) >= 0;
+  bool operator >=(Appointment other) => compareTo(other) >= 0;
 
   @override
   @useResult

@@ -654,7 +654,13 @@ void main() {
     });
     test('does not depend on the order of previous calls', () {
       final Appointment? first = Appointment.tryParse('e');
+
+      /// Ignored because of the objective of this test.
+      // ignore: unused_result
       Appointment.tryParse('ms');
+
+      /// Ignored because of the objective of this test.
+      // ignore: unused_result
       Appointment.tryParse('invalid');
       expect(Appointment.tryParse('e'), equals(first));
     });
