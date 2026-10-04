@@ -108,7 +108,7 @@ void main() {
 
     test('throws FormatException for unknown string', () {
       expect(
-        () => Appointment.parse('bishop'),
+        () => Appointment.parse('string'),
         throwsA(isA<FormatException>()),
       );
     });
@@ -122,7 +122,7 @@ void main() {
         () => Appointment.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (FormatException e) => e.message,
+            (e) => e.message,
             'message',
             contains('Appointment'),
           ),
@@ -135,7 +135,7 @@ void main() {
         () => Appointment.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (FormatException e) => e.message,
+            (e) => e.message,
             'message',
             contains('invalid'),
           ),
@@ -148,7 +148,7 @@ void main() {
         () => Appointment.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (FormatException e) => e.source,
+            (e) => e.source,
             'source',
             equals('invalid'),
           ),
@@ -310,16 +310,14 @@ void main() {
 
   group('Appointment — ordering consistency', () {
     test('elder is the minimum value', () {
-      final List<Appointment> sorted = List<Appointment>.from(
-        Appointment.values,
-      )..sort((Appointment a, Appointment b) => a.compareTo(b));
+      final sorted = List<Appointment>.from(Appointment.values)
+        ..sort((a, b) => a.compareTo(b));
       expect(sorted.first, equals(Appointment.elder));
     });
 
     test('ministerialservant is the maximum value', () {
-      final List<Appointment> sorted = List<Appointment>.from(
-        Appointment.values,
-      )..sort((Appointment a, Appointment b) => a.compareTo(b));
+      final sorted = List<Appointment>.from(Appointment.values)
+        ..sort((a, b) => a.compareTo(b));
       expect(sorted.last, equals(Appointment.ministerialservant));
     });
 
@@ -362,6 +360,303 @@ void main() {
           -Appointment.ministerialservant.compareTo(Appointment.elder).sign,
         ),
       );
+    });
+  });
+
+  group('Appointment.tryParse — elder', () {
+    test('returns elder for "elder"', () {
+      expect(Appointment.tryParse('elder'), equals(Appointment.elder));
+    });
+    test('returns elder for "e"', () {
+      expect(Appointment.tryParse('e'), equals(Appointment.elder));
+    });
+    test('returns elder for "Elder" (mixed case)', () {
+      expect(Appointment.tryParse('Elder'), equals(Appointment.elder));
+    });
+    test('returns elder for "ELDER" (upper case)', () {
+      expect(Appointment.tryParse('ELDER'), equals(Appointment.elder));
+    });
+    test('returns elder for "E" (upper case shorthand)', () {
+      expect(Appointment.tryParse('E'), equals(Appointment.elder));
+    });
+    test('returns elder for "eLdEr" (alternating case)', () {
+      expect(Appointment.tryParse('eLdEr'), equals(Appointment.elder));
+    });
+    test('returns elder for " elder " (surrounding whitespace)', () {
+      expect(Appointment.tryParse(' elder '), equals(Appointment.elder));
+    });
+    test('returns elder for "e l d e r" (internal whitespace)', () {
+      expect(Appointment.tryParse('e l d e r'), equals(Appointment.elder));
+    });
+    test('returns elder for tab and newline whitespace', () {
+      expect(Appointment.tryParse('\t elder \n'), equals(Appointment.elder));
+    });
+    test('returns elder for " e " (padded shorthand)', () {
+      expect(Appointment.tryParse(' e '), equals(Appointment.elder));
+    });
+    test('returns elder for a non-breaking space (U+00A0)', () {
+      expect(Appointment.tryParse('\u00A0elder'), equals(Appointment.elder));
+    });
+    test('returns elder for an em space (U+2003)', () {
+      expect(Appointment.tryParse('el\u2003der'), equals(Appointment.elder));
+    });
+  });
+
+  group('Appointment.tryParse — ministerialservant', () {
+    test('returns ministerialservant for "ministerialservant"', () {
+      expect(
+        Appointment.tryParse('ministerialservant'),
+        equals(Appointment.ministerialservant),
+      );
+    });
+    test('returns ministerialservant for "ms"', () {
+      expect(
+        Appointment.tryParse('ms'),
+        equals(Appointment.ministerialservant),
+      );
+    });
+    test('returns ministerialservant for "MinisterialServant"', () {
+      expect(
+        Appointment.tryParse('MinisterialServant'),
+        equals(Appointment.ministerialservant),
+      );
+    });
+    test('returns ministerialservant for "MINISTERIALSERVANT"', () {
+      expect(
+        Appointment.tryParse('MINISTERIALSERVANT'),
+        equals(Appointment.ministerialservant),
+      );
+    });
+    test('returns ministerialservant for "MS" (upper case shorthand)', () {
+      expect(
+        Appointment.tryParse('MS'),
+        equals(Appointment.ministerialservant),
+      );
+    });
+    test('returns ministerialservant for "Ms" and "mS" (mixed case)', () {
+      expect(
+        Appointment.tryParse('Ms'),
+        equals(Appointment.ministerialservant),
+      );
+      expect(
+        Appointment.tryParse('mS'),
+        equals(Appointment.ministerialservant),
+      );
+    });
+    test('returns ministerialservant for " ministerialservant "', () {
+      expect(
+        Appointment.tryParse(' ministerialservant '),
+        equals(Appointment.ministerialservant),
+      );
+    });
+    test('returns ministerialservant for "ministerial servant"', () {
+      expect(
+        Appointment.tryParse('ministerial servant'),
+        equals(Appointment.ministerialservant),
+      );
+    });
+    test('returns ministerialservant for "m s" (spaced shorthand)', () {
+      expect(
+        Appointment.tryParse('m s'),
+        equals(Appointment.ministerialservant),
+      );
+    });
+    test('returns ministerialservant for tab and newline whitespace', () {
+      expect(
+        Appointment.tryParse('\tministerial\nservant\r'),
+        equals(Appointment.ministerialservant),
+      );
+    });
+    test('returns ministerialservant for a non-breaking space', () {
+      expect(
+        Appointment.tryParse('ministerial\u00A0servant'),
+        equals(Appointment.ministerialservant),
+      );
+    });
+  });
+
+  group('Appointment.tryParse — invalid input returns null', () {
+    test('returns null for the empty string', () {
+      expect(Appointment.tryParse(''), isNull);
+    });
+    test('returns null for a whitespace-only string', () {
+      expect(Appointment.tryParse('   '), isNull);
+    });
+    test('returns null for a tab, newline and carriage return only', () {
+      expect(Appointment.tryParse('\t\n\r'), isNull);
+    });
+    test('returns null for an unknown word', () {
+      expect(Appointment.tryParse('string'), isNull);
+    });
+    test('returns null for a prefix of "elder"', () {
+      expect(Appointment.tryParse('eld'), isNull);
+    });
+    test('returns null for a prefix of "ministerialservant"', () {
+      expect(Appointment.tryParse('ministerial'), isNull);
+    });
+    test('returns null for a suffix of "ministerialservant"', () {
+      expect(Appointment.tryParse('servant'), isNull);
+    });
+    test('returns null for a single "m" and a single "s"', () {
+      expect(Appointment.tryParse('m'), isNull);
+      expect(Appointment.tryParse('s'), isNull);
+    });
+    test('returns null for "sm" (reversed abbreviation)', () {
+      expect(Appointment.tryParse('sm'), isNull);
+    });
+    test('returns null for "elders" (extra trailing letter)', () {
+      expect(Appointment.tryParse('elders'), isNull);
+    });
+    test('returns null for "ee" (repeated abbreviation)', () {
+      expect(Appointment.tryParse('ee'), isNull);
+    });
+    test('returns null for "e,ms" (two values at once)', () {
+      expect(Appointment.tryParse('e,ms'), isNull);
+    });
+    test('returns null for "e." (trailing punctuation)', () {
+      expect(Appointment.tryParse('e.'), isNull);
+    });
+    test('returns null for a numeric string', () {
+      expect(Appointment.tryParse('1'), isNull);
+    });
+    test('returns null for the string "null"', () {
+      expect(Appointment.tryParse('null'), isNull);
+    });
+    test('returns null for a qualified enum name', () {
+      expect(Appointment.tryParse('Appointment.elder'), isNull);
+    });
+    test('returns null for an accented letter', () {
+      expect(Appointment.tryParse('\u00E9lder'), isNull);
+    });
+    test('returns null when a zero-width space (U+200B) is present', () {
+      // U+200B is not whitespace for `\s`, so it is not stripped.
+      expect(Appointment.tryParse('\u200Belder'), isNull);
+      expect(Appointment.tryParse('el\u200Bder'), isNull);
+    });
+    test('returns null for a very long string', () {
+      expect(Appointment.tryParse('e' * 10000), isNull);
+    });
+  });
+
+  group('Appointment.tryParse — never throws', () {
+    test('does not throw for any of a set of awkward inputs', () {
+      final inputs = <String>[
+        '',
+        ' ',
+        '\n',
+        'string',
+        'elder!',
+        '\u0000',
+        '\uFFFF',
+        '😀',
+        'e' * 10000,
+      ];
+      for (final input in inputs) {
+        expect(
+          () => Appointment.tryParse(input),
+          returnsNormally,
+          reason: '"$input" must not throw',
+        );
+      }
+    });
+  });
+
+  group('Appointment.tryParse — result type', () {
+    test('returns an Appointment for valid input', () {
+      expect(Appointment.tryParse('e'), isA<Appointment>());
+    });
+    test('returns the canonical (identical) enum instance', () {
+      expect(
+        identical(Appointment.tryParse('elder'), Appointment.elder),
+        isTrue,
+      );
+      expect(
+        identical(Appointment.tryParse('ms'), Appointment.ministerialservant),
+        isTrue,
+      );
+    });
+    test('different valid inputs for different values are distinct', () {
+      expect(
+        Appointment.tryParse('e'),
+        isNot(equals(Appointment.tryParse('ms'))),
+      );
+    });
+    test('every alias for the same value yields the same instance', () {
+      const elderAliases = <String>['elder', 'e', 'E', ' ELDER '];
+      for (final alias in elderAliases) {
+        expect(Appointment.tryParse(alias), same(Appointment.elder));
+      }
+    });
+  });
+
+  group('Appointment.tryParse — consistency with parse', () {
+    test('equals parse for every valid input', () {
+      const inputs = <String>[
+        'elder',
+        'e',
+        'E',
+        ' Elder ',
+        'e l d e r',
+        'ministerialservant',
+        'ms',
+        'MS',
+        'ministerial servant',
+      ];
+      for (final input in inputs) {
+        expect(
+          Appointment.tryParse(input),
+          equals(Appointment.parse(input)),
+          reason: '"$input" should parse identically',
+        );
+      }
+    });
+    test('returns null exactly where parse throws FormatException', () {
+      const inputs = <String>['', '   ', 'string', 'eld', 'servant', 'sm', '1'];
+      for (final input in inputs) {
+        expect(Appointment.tryParse(input), isNull, reason: '"$input"');
+        expect(
+          () => Appointment.parse(input),
+          throwsA(isA<FormatException>()),
+          reason: '"$input"',
+        );
+      }
+    });
+  });
+
+  group('Appointment.tryParse — round-trip', () {
+    test('tryParse(toString()) returns the original for every value', () {
+      for (final Appointment appointment in Appointment.values) {
+        expect(
+          Appointment.tryParse(appointment.toString()),
+          equals(appointment),
+          reason: '$appointment should round-trip',
+        );
+      }
+    });
+    test('tryParse(name) returns the original for every value', () {
+      for (final Appointment appointment in Appointment.values) {
+        expect(
+          Appointment.tryParse(appointment.name),
+          equals(appointment),
+          reason: '${appointment.name} should round-trip',
+        );
+      }
+    });
+  });
+
+  group('Appointment.tryParse — idempotence and purity', () {
+    test('returns the same result on repeated calls', () {
+      expect(Appointment.tryParse('ms'), equals(Appointment.tryParse('ms')));
+      expect(
+        Appointment.tryParse('nope'),
+        equals(Appointment.tryParse('nope')),
+      );
+    });
+    test('does not depend on the order of previous calls', () {
+      final Appointment? first = Appointment.tryParse('e');
+      Appointment.tryParse('ms');
+      Appointment.tryParse('invalid');
+      expect(Appointment.tryParse('e'), equals(first));
     });
   });
 }

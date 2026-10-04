@@ -12,47 +12,61 @@ enum Appointment implements Comparable<Appointment> {
 
   /// Constructs a new [Appointment] instance from a [formattedString].
   ///
-  factory Appointment.parse(String formattedString) {
-    final String lowerNoWhiteSpaces = formattedString
-        .removeAllWhitespace()
-        .toLowerCase();
-    return switch (lowerNoWhiteSpaces) {
-      'elder' || 'e' => .elder,
-      'ministerialservant' || 'ms' => .ministerialservant,
-      _ => throw FormatException(
+  /// Matching ignores case and whitespace, and accepts the full name or the
+  /// abbreviations `e` and `ms`.
+  ///
+  /// Throws a [FormatException] if [formattedString] does not match any
+  /// appointment. Use [tryParse] to get `null` instead of an exception.
+  factory parse(String formattedString) =>
+      tryParse(formattedString) ??
+      (throw FormatException(
         parseFormatExceptionMessage(enumName, formattedString),
         formattedString,
-      ),
-    };
-  }
+      ));
+  // factory parse(String formattedString) {
+  //   final String lowerNoWhiteSpaces = formattedString
+  //       .removeAllWhitespace()
+  //       .toLowerCase();
+  //   return switch (lowerNoWhiteSpaces) {
+  //     'elder' || 'e' => .elder,
+  //     'ministerialservant' || 'ms' => .ministerialservant,
+  //     _ => throw FormatException(
+  //       parseFormatExceptionMessage(enumName, formattedString),
+  //       formattedString,
+  //     ),
+  //   };
+  // }
 
   /// The name of this enum.
   static const String enumName = 'Appointment';
 
-  /// Returns if this appointment comes before the [other] in alphabetical
-  /// order.
-  ///
+  /// Whether this appointment comes before the [other] in alphabetical order.
   bool operator <(covariant Appointment other) => compareTo(other) < 0;
 
-  /// Returns if this appointment comes before or is equal to the [other] in
+  /// Whether this appointment comes before or is equal to the [other] in
   /// alphabetical order.
-  ///
   bool operator <=(covariant Appointment other) => compareTo(other) <= 0;
 
-  /// Returns if this appointment comes after the [other] in alphabetical
-  /// order.
-  ///
+  /// Whether this appointment comes after the [other] in alphabetical order.
   bool operator >(covariant Appointment other) => compareTo(other) > 0;
 
-  /// Returns if this appointment comes after or is equal to the [other] in
+  /// Whether this appointment comes after or is equal to the [other] in
   /// alphabetical order.
-  ///
   bool operator >=(covariant Appointment other) => compareTo(other) >= 0;
 
   @override
-  int compareTo(covariant Appointment other) =>
-      identical(this, other) ? 0 : name.compareTo(other.name);
+  int compareTo(Appointment other) =>
+      identical(this, other) ? 0 : Enum.compareByName(this, other);
 
   @override
-  String toString() => name.toLowerCase();
+  String toString() => name;
+
+  /// Parses [formattedString] like [Appointment.parse], but returns `null`
+  /// instead of throwing when it does not match any appointment.
+  static Appointment? tryParse(String formattedString) =>
+      switch (formattedString.removeAllWhitespace().toLowerCase()) {
+        'elder' || 'e' => .elder,
+        'ministerialservant' || 'ms' => .ministerialservant,
+        _ => null,
+      };
 }
