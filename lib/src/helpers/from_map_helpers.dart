@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:meta/meta.dart';
 import 'package:scheduler/src/exceptions/exception_messages.dart';
 
 /// Parses a boolean value from a [map].
@@ -13,6 +14,7 @@ import 'package:scheduler/src/exceptions/exception_messages.dart';
 ///
 /// Throws [FormatException] if the value is absent, not a [bool], or not a
 /// valid boolean string.
+@useResult
 bool parseBoolean({
   required String className,
   required Map<String, Object?> map,
@@ -29,6 +31,7 @@ bool parseBoolean({
 
 /// Parses a boolean value from a [map] like [parseBoolean], but returns `null`
 /// when the value is `null` or the string `'null'`.
+@useResult
 bool? parseBooleanNullable({
   required String className,
   required Map<String, Object?> map,
@@ -60,6 +63,7 @@ bool? parseBooleanNullable({
 ///
 /// Throws [FormatException] if the value is absent, has the wrong type, or
 /// [parser] throws.
+@useResult
 T parseClass<T, K>({
   required String className,
   required Map<String, Object?> map,
@@ -75,6 +79,7 @@ T parseClass<T, K>({
 
 /// Like [parseClass], but returns `null` when the value is `null` or the string
 /// `'null'`.
+@useResult
 T? parseClassNullable<T, K>({
   required String className,
   required Map<String, Object?> map,
@@ -94,6 +99,7 @@ T? parseClassNullable<T, K>({
 /// Accepts a [double] or an [int] (automatically promoted to [double]).
 ///
 /// Throws [FormatException] if the value is absent or not numeric.
+@useResult
 double parseDouble({
   required String className,
   required Map<String, Object?> map,
@@ -108,6 +114,7 @@ double parseDouble({
 
 /// Like [parseDouble], but returns `null` when the value is `null` or the
 /// string `'null'`.
+@useResult
 double? parseDoubleNullable({
   required String className,
   required Map<String, Object?> map,
@@ -133,6 +140,7 @@ double? parseDoubleNullable({
 /// * [key]: The key to look up.
 ///
 /// Throws [FormatException] if the value is absent or not an [int].
+@useResult
 int parseInt({
   required String className,
   required Map<String, Object?> map,
@@ -147,6 +155,7 @@ int parseInt({
 
 /// Like [parseInt], but returns `null` when the value is `null` or the string
 /// `'null'`.
+@useResult
 int? parseIntNullable({
   required String className,
   required Map<String, Object?> map,
@@ -166,6 +175,7 @@ int? parseIntNullable({
 /// type [T] using the [parser], and collects them into a [SplayTreeSet]. The
 /// resulting set is sorted by [T]’s natural ordering; duplicates are silently
 /// dropped.
+@useResult
 SplayTreeSet<T> parseObjectListToSplayTreeSet<T extends Comparable<T>, K>({
   required String className,
   required Map<String, Object?> map,
@@ -183,6 +193,7 @@ SplayTreeSet<T> parseObjectListToSplayTreeSet<T extends Comparable<T>, K>({
 
 /// Like [parseObjectListToSplayTreeSet], but returns `null` when the value is
 /// `null` or the string `'null'`.
+@useResult
 SplayTreeSet<T>?
 parseObjectListToSplayTreeSetNullable<T extends Comparable<T>, K>({
   required String className,
@@ -202,6 +213,7 @@ parseObjectListToSplayTreeSetNullable<T extends Comparable<T>, K>({
 
 /// Like [parseObjectListToSplayTreeSet], but returns an empty set instead of
 /// throwing when the value is `null` or the string `'null'`.
+@useResult
 SplayTreeSet<T>
 parseObjectListToSplayTreeSetPossiblyEmpty<T extends Comparable<T>, K>({
   required String className,
@@ -236,6 +248,7 @@ parseObjectListToSplayTreeSetPossiblyEmpty<T extends Comparable<T>, K>({
 ///
 /// Throws [FormatException] if the value is absent, has the wrong type, or
 /// [fromMap] throws.
+@useResult
 SplayTreeSet<T> parseObjectMapToSplayTreeSet<T extends Comparable<T>>({
   required String className,
   required Map<String, Object?> map,
@@ -253,6 +266,7 @@ SplayTreeSet<T> parseObjectMapToSplayTreeSet<T extends Comparable<T>>({
 
 /// Like [parseObjectMapToSplayTreeSet], but returns `null` when the value is
 /// `null` or the string `'null'`.
+@useResult
 SplayTreeSet<T>? parseObjectMapToSplayTreeSetNullable<T extends Comparable<T>>({
   required String className,
   required Map<String, Object?> map,
@@ -271,6 +285,7 @@ SplayTreeSet<T>? parseObjectMapToSplayTreeSetNullable<T extends Comparable<T>>({
 
 /// Like [parseObjectMapToSplayTreeSet], but returns an empty set instead of
 /// throwing when the value is `null` or the string `'null'`.
+@useResult
 SplayTreeSet<T>
 parseObjectMapToSplayTreeSetPossiblyEmpty<T extends Comparable<T>>({
   required String className,
@@ -301,6 +316,7 @@ parseObjectMapToSplayTreeSetPossiblyEmpty<T extends Comparable<T>>({
 /// * [key]: The key to look up in the map.
 ///
 /// Throws [FormatException] if the value is absent or not a [String].
+@useResult
 String parseString({
   required String className,
   required Map<String, Object?> map,
@@ -327,6 +343,7 @@ String parseString({
 /// * [key]: The key to look up in the map.
 ///
 /// Throws [FormatException] if the value is absent or not a [String].
+@useResult
 String? parseStringNullable({
   required String className,
   required Map<String, Object?> map,
@@ -341,6 +358,7 @@ String? parseStringNullable({
 };
 
 /// A private helper to reduce code duplication when parsing lists.
+@useResult
 Iterable<T> _parseList<T, K>(
   List<Object?> list,
   T Function(K) parser,
