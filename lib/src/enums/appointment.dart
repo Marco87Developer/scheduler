@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:scheduler/src/exceptions/exception_messages.dart';
 import 'package:scheduler/src/extensions/string_extension.dart';
 
@@ -28,28 +29,35 @@ enum Appointment implements Comparable<Appointment> {
   static const String enumName = 'Appointment';
 
   /// Whether this appointment comes before the [other] in alphabetical order.
+  @useResult
   bool operator <(covariant Appointment other) => compareTo(other) < 0;
 
   /// Whether this appointment comes before or is equal to the [other] in
   /// alphabetical order.
+  @useResult
   bool operator <=(covariant Appointment other) => compareTo(other) <= 0;
 
   /// Whether this appointment comes after the [other] in alphabetical order.
+  @useResult
   bool operator >(covariant Appointment other) => compareTo(other) > 0;
 
   /// Whether this appointment comes after or is equal to the [other] in
   /// alphabetical order.
+  @useResult
   bool operator >=(covariant Appointment other) => compareTo(other) >= 0;
 
   @override
+  @useResult
   int compareTo(Appointment other) =>
       identical(this, other) ? 0 : Enum.compareByName(this, other);
 
   @override
+  @useResult
   String toString() => name;
 
   /// Parses [formattedString] like [Appointment.parse], but returns `null`
   /// instead of throwing when it does not match any appointment.
+  @useResult
   static Appointment? tryParse(String formattedString) =>
       switch (formattedString.removeAllWhitespace().toLowerCase()) {
         'elder' || 'e' => .elder,
