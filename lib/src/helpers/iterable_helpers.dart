@@ -1,8 +1,11 @@
+import 'package:meta/meta.dart';
+
 /// Compares two [Iterable]s of [Comparable] elements lexicographically.
 ///
 /// Iterates both sequences in lock-step and returns the comparison result of
 /// the first pair of elements that differs. Returns `0` if all paired elements
 /// are equal.
+@useResult
 int elementCompareIterables<T extends Comparable<T>>(
   Iterable<T> a,
   Iterable<T> b,
@@ -21,6 +24,7 @@ int elementCompareIterables<T extends Comparable<T>>(
 /// * `1` if [a] is greater.
 /// * `-1` if [b] is greater.
 /// * `0` if both iterables are identical in elements and length.
+@useResult
 int elementCompareIterablesReversed<T extends Comparable<T>>(
   Iterable<T> a,
   Iterable<T> b,
@@ -62,6 +66,7 @@ int elementCompareIterablesReversed<T extends Comparable<T>>(
 /// * `1` if [a] is longer.
 /// * `-1` if [b] is longer.
 /// * `0` if both iterables are identical in elements and length.
+@useResult
 int _elementComparison<T extends Comparable<T>>(Iterable<T> a, Iterable<T> b) {
   if (a is List<T> && b is List<T>) {
     final int aLen = a.length;
