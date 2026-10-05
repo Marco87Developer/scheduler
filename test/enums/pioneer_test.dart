@@ -192,7 +192,7 @@ void main() {
         () => Pioneer.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (FormatException e) => e.message,
+            (e) => e.message,
             'message',
             contains('Pioneer'),
           ),
@@ -205,7 +205,7 @@ void main() {
         () => Pioneer.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (FormatException e) => e.message,
+            (e) => e.message,
             'message',
             contains('invalid'),
           ),
@@ -218,7 +218,7 @@ void main() {
         () => Pioneer.parse('invalid'),
         throwsA(
           isA<FormatException>().having(
-            (FormatException e) => e.source,
+            (e) => e.source,
             'source',
             equals('invalid'),
           ),
@@ -231,7 +231,7 @@ void main() {
         () => Pioneer.parse('INVALID'),
         throwsA(
           isA<FormatException>().having(
-            (FormatException e) => e.source,
+            (e) => e.source,
             'source',
             equals('INVALID'),
           ),
@@ -244,7 +244,7 @@ void main() {
         () => Pioneer.parse(' invalid '),
         throwsA(
           isA<FormatException>().having(
-            (FormatException e) => e.source,
+            (e) => e.source,
             'source',
             equals(' invalid '),
           ),
@@ -306,12 +306,12 @@ void main() {
     });
 
     test('each adjacent pair is in ascending duration order', () {
-      final List<Pioneer> byDuration = <Pioneer>[
+      final byDuration = <Pioneer>[
         Pioneer.auxiliary,
         Pioneer.auxiliarycontinuously,
         Pioneer.regular,
       ];
-      for (int i = 0; i < byDuration.length - 1; i++) {
+      for (var i = 0; i < byDuration.length - 1; i++) {
         expect(
           byDuration[i].compareTo(byDuration[i + 1]),
           isNegative,
@@ -511,7 +511,7 @@ void main() {
 
     test('toString results are all distinct', () {
       final Set<String> strings = Pioneer.values
-          .map((Pioneer p) => p.toString())
+          .map((p) => p.toString())
           .toSet();
       expect(strings, hasLength(Pioneer.values.length));
     });
@@ -552,20 +552,20 @@ void main() {
 
   group('Pioneer — ordering consistency', () {
     test('auxiliary is the minimum value (shortest duration)', () {
-      final List<Pioneer> sorted = List<Pioneer>.from(Pioneer.values)
-        ..sort((Pioneer a, Pioneer b) => a.compareTo(b));
+      final sorted = List<Pioneer>.from(Pioneer.values)
+        ..sort((a, b) => a.compareTo(b));
       expect(sorted.first, equals(Pioneer.auxiliary));
     });
 
     test('regular is the maximum value (longest duration)', () {
-      final List<Pioneer> sorted = List<Pioneer>.from(Pioneer.values)
-        ..sort((Pioneer a, Pioneer b) => a.compareTo(b));
+      final sorted = List<Pioneer>.from(Pioneer.values)
+        ..sort((a, b) => a.compareTo(b));
       expect(sorted.last, equals(Pioneer.regular));
     });
 
     test('sorted order is auxiliary, auxiliarycontinuously, regular', () {
-      final List<Pioneer> sorted = List<Pioneer>.from(Pioneer.values)
-        ..sort((Pioneer a, Pioneer b) => a.compareTo(b));
+      final sorted = List<Pioneer>.from(Pioneer.values)
+        ..sort((a, b) => a.compareTo(b));
       expect(
         sorted,
         equals(<Pioneer>[
@@ -650,7 +650,7 @@ void main() {
       // Durations: auxiliary=30, auxiliarycontinuously=360, regular=600.
       // The declaration order matches the duration order, so confirm that
       // compareTo yields the same sign as the duration difference.
-      final List<(Pioneer, int)> withDuration = <(Pioneer, int)>[
+      final withDuration = <(Pioneer, int)>[
         (Pioneer.auxiliary, 30),
         (Pioneer.auxiliarycontinuously, 360),
         (Pioneer.regular, 600),
@@ -666,6 +666,362 @@ void main() {
           );
         }
       }
+    });
+  });
+
+  group('Pioneer.tryParse — auxiliary', () {
+    test('returns auxiliary for "auxiliary"', () {
+      expect(Pioneer.tryParse('auxiliary'), equals(Pioneer.auxiliary));
+    });
+    test('returns auxiliary for "Auxiliary" (title case)', () {
+      expect(Pioneer.tryParse('Auxiliary'), equals(Pioneer.auxiliary));
+    });
+    test('returns auxiliary for "AUXILIARY" (upper case)', () {
+      expect(Pioneer.tryParse('AUXILIARY'), equals(Pioneer.auxiliary));
+    });
+    test('returns auxiliary for "aUxIlIaRy" (alternating case)', () {
+      expect(Pioneer.tryParse('aUxIlIaRy'), equals(Pioneer.auxiliary));
+    });
+    test('returns auxiliary for " auxiliary " (surrounding spaces)', () {
+      expect(Pioneer.tryParse(' auxiliary '), equals(Pioneer.auxiliary));
+    });
+    test('returns auxiliary for "a u x i l i a r y" (internal spaces)', () {
+      expect(Pioneer.tryParse('a u x i l i a r y'), equals(Pioneer.auxiliary));
+    });
+    test('returns auxiliary for tab and newline whitespace', () {
+      expect(Pioneer.tryParse('\t auxiliary \n'), equals(Pioneer.auxiliary));
+    });
+    test('returns auxiliary for a non-breaking space (U+00A0)', () {
+      expect(Pioneer.tryParse('\u00A0auxiliary'), equals(Pioneer.auxiliary));
+    });
+    test('returns auxiliary for an em space (U+2003)', () {
+      expect(Pioneer.tryParse('auxi\u2003liary'), equals(Pioneer.auxiliary));
+    });
+  });
+
+  group('Pioneer.tryParse — auxiliarycontinuously', () {
+    test('returns auxiliarycontinuously for "auxiliarycontinuously"', () {
+      expect(
+        Pioneer.tryParse('auxiliarycontinuously'),
+        equals(Pioneer.auxiliarycontinuously),
+      );
+    });
+    test('returns auxiliarycontinuously for "AuxiliaryContinuously"', () {
+      expect(
+        Pioneer.tryParse('AuxiliaryContinuously'),
+        equals(Pioneer.auxiliarycontinuously),
+      );
+    });
+    test('returns auxiliarycontinuously for "AUXILIARYCONTINUOUSLY"', () {
+      expect(
+        Pioneer.tryParse('AUXILIARYCONTINUOUSLY'),
+        equals(Pioneer.auxiliarycontinuously),
+      );
+    });
+    test('returns auxiliarycontinuously for " auxiliarycontinuously "', () {
+      expect(
+        Pioneer.tryParse(' auxiliarycontinuously '),
+        equals(Pioneer.auxiliarycontinuously),
+      );
+    });
+    test('returns auxiliarycontinuously for "auxiliary continuously"', () {
+      expect(
+        Pioneer.tryParse('auxiliary continuously'),
+        equals(Pioneer.auxiliarycontinuously),
+      );
+    });
+    test('returns auxiliarycontinuously for multiple internal spaces', () {
+      expect(
+        Pioneer.tryParse('auxiliary   continuously'),
+        equals(Pioneer.auxiliarycontinuously),
+      );
+    });
+    test('returns auxiliarycontinuously for tab and newline whitespace', () {
+      expect(
+        Pioneer.tryParse('\tauxiliary\ncontinuously\r'),
+        equals(Pioneer.auxiliarycontinuously),
+      );
+    });
+    test('returns auxiliarycontinuously for a non-breaking space', () {
+      expect(
+        Pioneer.tryParse('auxiliary\u00A0continuously'),
+        equals(Pioneer.auxiliarycontinuously),
+      );
+    });
+    test('does not confuse it with auxiliary when whitespace is inside', () {
+      expect(
+        Pioneer.tryParse('auxiliary continuously'),
+        isNot(equals(Pioneer.auxiliary)),
+      );
+    });
+  });
+
+  group('Pioneer.tryParse — regular', () {
+    test('returns regular for "regular"', () {
+      expect(Pioneer.tryParse('regular'), equals(Pioneer.regular));
+    });
+    test('returns regular for "Regular" (title case)', () {
+      expect(Pioneer.tryParse('Regular'), equals(Pioneer.regular));
+    });
+    test('returns regular for "REGULAR" (upper case)', () {
+      expect(Pioneer.tryParse('REGULAR'), equals(Pioneer.regular));
+    });
+    test('returns regular for "rEgUlAr" (alternating case)', () {
+      expect(Pioneer.tryParse('rEgUlAr'), equals(Pioneer.regular));
+    });
+    test('returns regular for " regular " (surrounding spaces)', () {
+      expect(Pioneer.tryParse(' regular '), equals(Pioneer.regular));
+    });
+    test('returns regular for "r e g u l a r" (internal spaces)', () {
+      expect(Pioneer.tryParse('r e g u l a r'), equals(Pioneer.regular));
+    });
+    test('returns regular for tab, newline and carriage return', () {
+      expect(Pioneer.tryParse('\tre\ngu\rlar'), equals(Pioneer.regular));
+    });
+    test('returns regular for a non-breaking space (U+00A0)', () {
+      expect(Pioneer.tryParse('reg\u00A0ular'), equals(Pioneer.regular));
+    });
+    test('returns regular for an em space (U+2003)', () {
+      expect(Pioneer.tryParse('regular\u2003'), equals(Pioneer.regular));
+    });
+  });
+
+  group('Pioneer.tryParse — invalid input returns null', () {
+    test('returns null for the empty string', () {
+      expect(Pioneer.tryParse(''), isNull);
+    });
+    test('returns null for a whitespace-only string', () {
+      expect(Pioneer.tryParse('   '), isNull);
+    });
+    test('returns null for tab, newline and carriage return only', () {
+      expect(Pioneer.tryParse('\t\n\r'), isNull);
+    });
+    test('returns null for an unknown word', () {
+      expect(Pioneer.tryParse('special'), isNull);
+    });
+    test('returns null for the enum name', () {
+      expect(Pioneer.tryParse('pioneer'), isNull);
+    });
+    test('returns null for a prefix of "auxiliary"', () {
+      expect(Pioneer.tryParse('aux'), isNull);
+    });
+    test('returns null for a prefix of "auxiliarycontinuously"', () {
+      expect(Pioneer.tryParse('auxiliarycont'), isNull);
+    });
+    test('returns null for a prefix of "regular"', () {
+      expect(Pioneer.tryParse('reg'), isNull);
+    });
+    test('returns null for a suffix of "auxiliary"', () {
+      expect(Pioneer.tryParse('liary'), isNull);
+    });
+    test('returns null for a suffix of "auxiliarycontinuously"', () {
+      expect(Pioneer.tryParse('continuously'), isNull);
+    });
+    test('returns null for a suffix of "regular"', () {
+      expect(Pioneer.tryParse('gular'), isNull);
+    });
+    test('returns null for "auxiliaries" (different ending)', () {
+      expect(Pioneer.tryParse('auxiliaries'), isNull);
+    });
+    test('returns null for "regulars" (extra trailing letter)', () {
+      expect(Pioneer.tryParse('regulars'), isNull);
+    });
+    test('returns null for "regularregular" (repeated value)', () {
+      expect(Pioneer.tryParse('regularregular'), isNull);
+    });
+    test('returns null for "auxiliaryregular" (two values at once)', () {
+      expect(Pioneer.tryParse('auxiliaryregular'), isNull);
+    });
+    test('returns null for "auxiliary,regular" (separated values)', () {
+      expect(Pioneer.tryParse('auxiliary,regular'), isNull);
+    });
+    test('returns null for "regular." (trailing punctuation)', () {
+      expect(Pioneer.tryParse('regular.'), isNull);
+    });
+    test('returns null for "auxiliary_continuously" (underscore)', () {
+      expect(Pioneer.tryParse('auxiliary_continuously'), isNull);
+    });
+    test('returns null for "auxiliary-continuously" (hyphen)', () {
+      expect(Pioneer.tryParse('auxiliary-continuously'), isNull);
+    });
+    test('returns null for a numeric string', () {
+      expect(Pioneer.tryParse('1'), isNull);
+    });
+    test('returns null for the string "null"', () {
+      expect(Pioneer.tryParse('null'), isNull);
+    });
+    test('returns null for a qualified enum name', () {
+      expect(Pioneer.tryParse('Pioneer.regular'), isNull);
+    });
+    test('returns null for an accented letter', () {
+      expect(Pioneer.tryParse('r\u00E9gular'), isNull);
+    });
+    test('returns null when a zero-width space (U+200B) is present', () {
+      // U+200B is not whitespace for `\s`, so it is not stripped.
+      expect(Pioneer.tryParse('\u200Bregular'), isNull);
+      expect(Pioneer.tryParse('reg\u200Bular'), isNull);
+    });
+    test('returns null for a very long string', () {
+      expect(Pioneer.tryParse('r' * 10000), isNull);
+    });
+  });
+
+  group('Pioneer.tryParse — never throws', () {
+    test('does not throw for any of a set of awkward inputs', () {
+      final inputs = <String>[
+        '',
+        ' ',
+        '\n',
+        'special',
+        'regular!',
+        '\u0000',
+        '\uFFFF',
+        '\u{1F600}',
+        'r' * 10000,
+      ];
+      for (final input in inputs) {
+        expect(
+          () => Pioneer.tryParse(input),
+          returnsNormally,
+          reason: 'input of length ${input.length} must not throw',
+        );
+      }
+    });
+  });
+
+  group('Pioneer.tryParse — result type', () {
+    test('returns a Pioneer for valid input', () {
+      expect(Pioneer.tryParse('regular'), isA<Pioneer>());
+    });
+    test('returns the canonical (identical) enum instance', () {
+      expect(
+        identical(Pioneer.tryParse('auxiliary'), Pioneer.auxiliary),
+        isTrue,
+      );
+      expect(
+        identical(
+          Pioneer.tryParse('auxiliarycontinuously'),
+          Pioneer.auxiliarycontinuously,
+        ),
+        isTrue,
+      );
+      expect(identical(Pioneer.tryParse('regular'), Pioneer.regular), isTrue);
+    });
+    test('different valid inputs for different values are distinct', () {
+      final Pioneer? a = Pioneer.tryParse('auxiliary');
+      final Pioneer? b = Pioneer.tryParse('auxiliarycontinuously');
+      final Pioneer? c = Pioneer.tryParse('regular');
+      expect(a, isNot(equals(b)));
+      expect(a, isNot(equals(c)));
+      expect(b, isNot(equals(c)));
+    });
+    test('every alias for the same value yields the same instance', () {
+      const auxiliaryAliases = <String>[
+        'auxiliary',
+        'AUXILIARY',
+        ' Auxiliary ',
+        'a u x i l i a r y',
+      ];
+      for (final alias in auxiliaryAliases) {
+        expect(Pioneer.tryParse(alias), same(Pioneer.auxiliary));
+      }
+      const continuouslyAliases = <String>[
+        'auxiliarycontinuously',
+        'AUXILIARYCONTINUOUSLY',
+        ' Auxiliary Continuously ',
+      ];
+      for (final alias in continuouslyAliases) {
+        expect(Pioneer.tryParse(alias), same(Pioneer.auxiliarycontinuously));
+      }
+      const regularAliases = <String>[
+        'regular',
+        'REGULAR',
+        ' Regular ',
+        'r e g u l a r',
+      ];
+      for (final alias in regularAliases) {
+        expect(Pioneer.tryParse(alias), same(Pioneer.regular));
+      }
+    });
+  });
+
+  group('Pioneer.tryParse — consistency with parse', () {
+    test('equals parse for every valid input', () {
+      const inputs = <String>[
+        'auxiliary',
+        'AUXILIARY',
+        ' Auxiliary ',
+        'a u x i l i a r y',
+        'auxiliarycontinuously',
+        'Auxiliary Continuously',
+        'regular',
+        'REGULAR',
+        ' Regular ',
+        'r e g u l a r',
+      ];
+      for (final input in inputs) {
+        expect(
+          Pioneer.tryParse(input),
+          equals(Pioneer.parse(input)),
+          reason: '"$input" should parse identically',
+        );
+      }
+    });
+    test('returns null exactly where parse throws FormatException', () {
+      const inputs = <String>[
+        '',
+        '   ',
+        'special',
+        'aux',
+        'auxiliarycont',
+        'reg',
+        '1',
+        'null',
+      ];
+      for (final input in inputs) {
+        expect(Pioneer.tryParse(input), isNull, reason: '"$input"');
+        expect(
+          () => Pioneer.parse(input),
+          throwsA(isA<FormatException>()),
+          reason: '"$input"',
+        );
+      }
+    });
+  });
+
+  group('Pioneer.tryParse — round-trip', () {
+    test('tryParse(toString()) returns the original for every value', () {
+      for (final Pioneer pioneer in Pioneer.values) {
+        expect(
+          Pioneer.tryParse(pioneer.toString()),
+          equals(pioneer),
+          reason: '$pioneer should round-trip',
+        );
+      }
+    });
+    test('tryParse(name) returns the original for every value', () {
+      for (final Pioneer pioneer in Pioneer.values) {
+        expect(
+          Pioneer.tryParse(pioneer.name),
+          equals(pioneer),
+          reason: '${pioneer.name} should round-trip',
+        );
+      }
+    });
+  });
+
+  group('Pioneer.tryParse — idempotence and purity', () {
+    test('returns the same result on repeated calls', () {
+      expect(Pioneer.tryParse('regular'), equals(Pioneer.tryParse('regular')));
+      expect(Pioneer.tryParse('nope'), equals(Pioneer.tryParse('nope')));
+    });
+    test('does not depend on the order of previous calls', () {
+      final Pioneer? first = Pioneer.tryParse('auxiliary');
+      final Pioneer? second = Pioneer.tryParse('regular');
+      final Pioneer? third = Pioneer.tryParse('invalid');
+      expect(second, equals(Pioneer.regular));
+      expect(third, isNull);
+      expect(Pioneer.tryParse('auxiliary'), equals(first));
     });
   });
 }
