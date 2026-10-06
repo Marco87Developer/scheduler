@@ -49,7 +49,7 @@ void main() {
     });
 
     test('contains the formatted string when it has special characters', () {
-      const String special = r'$pecial!@#';
+      const special = r'$pecial!@#';
       expect(
         parseFormatExceptionMessage('MyClass', special),
         contains(special),
@@ -57,7 +57,7 @@ void main() {
     });
 
     test('contains the formatted string when it has unicode characters', () {
-      const String unicode = 'caf\u00e9';
+      const unicode = 'caf\u00e9';
       expect(
         parseFormatExceptionMessage('MyClass', unicode),
         contains(unicode),
@@ -132,7 +132,7 @@ void main() {
     });
 
     test('formatted string with double quotes is preserved verbatim', () {
-      const String quoted = '"already quoted"';
+      const quoted = '"already quoted"';
       final String result = parseFormatExceptionMessage('Foo', quoted);
       expect(result, contains(quoted));
     });
@@ -157,13 +157,13 @@ void main() {
     });
 
     test('newline in formatted string is preserved verbatim', () {
-      const String value = 'line1\nline2';
+      const value = 'line1\nline2';
       final String result = parseFormatExceptionMessage('Foo', value);
       expect(result, contains(value));
     });
 
     test('tab in formatted string is preserved verbatim', () {
-      const String value = 'col1\tcol2';
+      const value = 'col1\tcol2';
       final String result = parseFormatExceptionMessage('Foo', value);
       expect(result, contains(value));
     });
@@ -171,8 +171,8 @@ void main() {
 
   group('parseFormatExceptionMessage — determinism', () {
     test('returns the same result on repeated calls with the same input', () {
-      const String name = 'MyClass';
-      const String value = 'bad';
+      const name = 'MyClass';
+      const value = 'bad';
       expect(
         parseFormatExceptionMessage(name, value),
         equals(parseFormatExceptionMessage(name, value)),
@@ -243,7 +243,7 @@ void main() {
     });
 
     test('contains the formatted string with special characters', () {
-      const String special = r'$pecial!@#';
+      const special = r'$pecial!@#';
       expect(
         fromJsonFormatExceptionMessage('MyClass', special),
         contains(special),
@@ -251,7 +251,7 @@ void main() {
     });
 
     test('contains the formatted string with unicode characters', () {
-      const String unicode = 'caf\u00e9';
+      const unicode = 'caf\u00e9';
       expect(
         fromJsonFormatExceptionMessage('MyClass', unicode),
         contains(unicode),
@@ -339,7 +339,7 @@ void main() {
     });
 
     test('formatted string with double quotes is preserved verbatim', () {
-      const String quoted = '"already quoted"';
+      const quoted = '"already quoted"';
       expect(fromJsonFormatExceptionMessage('Foo', quoted), contains(quoted));
     });
 
@@ -367,20 +367,20 @@ void main() {
     });
 
     test('newline in formatted string is preserved verbatim', () {
-      const String value = 'line1\nline2';
+      const value = 'line1\nline2';
       expect(fromJsonFormatExceptionMessage('Foo', value), contains(value));
     });
 
     test('tab in formatted string is preserved verbatim', () {
-      const String value = 'col1\tcol2';
+      const value = 'col1\tcol2';
       expect(fromJsonFormatExceptionMessage('Foo', value), contains(value));
     });
   });
 
   group('fromJsonFormatExceptionMessage — determinism', () {
     test('returns the same result on repeated calls with the same input', () {
-      const String name = 'MyClass';
-      const String value = 'bad';
+      const name = 'MyClass';
+      const value = 'bad';
       expect(
         fromJsonFormatExceptionMessage(name, value),
         equals(fromJsonFormatExceptionMessage(name, value)),
@@ -447,7 +447,7 @@ void main() {
     });
 
     test('contains the key with special characters', () {
-      const String special = r'$key!';
+      const special = r'$key!';
       expect(
         fromMapFormatExceptionMessage('MyClass', special),
         contains(special),
@@ -455,7 +455,7 @@ void main() {
     });
 
     test('contains the key with unicode characters', () {
-      const String unicode = 'cl\u00e9';
+      const unicode = 'cl\u00e9';
       expect(
         fromMapFormatExceptionMessage('MyClass', unicode),
         contains(unicode),
@@ -545,7 +545,7 @@ void main() {
     });
 
     test('key with single quotes is preserved verbatim', () {
-      const String singleQuoteKey = "it's";
+      const singleQuoteKey = "it's";
       expect(
         fromMapFormatExceptionMessage('Foo', singleQuoteKey),
         contains(singleQuoteKey),
@@ -580,20 +580,20 @@ void main() {
     });
 
     test('newline in key is preserved verbatim', () {
-      const String value = 'line1\nline2';
+      const value = 'line1\nline2';
       expect(fromMapFormatExceptionMessage('Foo', value), contains(value));
     });
 
     test('tab in key is preserved verbatim', () {
-      const String value = 'col1\tcol2';
+      const value = 'col1\tcol2';
       expect(fromMapFormatExceptionMessage('Foo', value), contains(value));
     });
   });
 
   group('fromMapFormatExceptionMessage — determinism', () {
     test('returns the same result on repeated calls with the same input', () {
-      const String name = 'MyClass';
-      const String key = 'myKey';
+      const name = 'MyClass';
+      const key = 'myKey';
       expect(
         fromMapFormatExceptionMessage(name, key),
         equals(fromMapFormatExceptionMessage(name, key)),

@@ -14,22 +14,25 @@ const String _titleKey = 'title';
 /// An assignment is a task that is assigned to one or more persons. It has a
 /// [title], a [start] and an [end].
 ///
+/// Assignments are ordered by [title], then by [start], then by [end].
+/// Equality is consistent with that order: two assignments are equal if they
+/// have the same [title] and denote the same moments, whether the dates are
+/// in UTC or local time.
 @immutable
-class Assignment implements Comparable<Assignment> {
-  /// Constructs a new [Assignment] instance.
-  ///
-  Assignment({
-    required this.title,
-    required DateTime start,
-    required DateTime end,
-  }) : start = minDateTime(start, end),
-       end = maxDateTime(start, end);
+class Assignment({
+  /// The end date and time.
+  required DateTime end,
 
+  /// The start date and time.
+  required DateTime start,
+
+  /// The title that identifies the type of this assignment.
+  required final String title,
+}) implements Comparable<Assignment> {
   /// Constructs a new [Assignment] instance based on [json].
-  ///
-  factory Assignment.fromJson(String json) {
+  factory fromJson(String json) {
     final Object? decoded;
-    final FormatException invalid = FormatException(
+    final invalid = FormatException(
       fromJsonFormatExceptionMessage(className, json),
       json,
     );
@@ -45,8 +48,7 @@ class Assignment implements Comparable<Assignment> {
   }
 
   /// Constructs a new [Assignment] instance based on [map].
-  ///
-  Assignment.fromMap(Map<String, Object?> map)
+  new fromMap(Map<String, Object?> map)
     : this(
         title: parseString(className: className, map: map, key: _titleKey),
         start: parseClass(
@@ -65,67 +67,60 @@ class Assignment implements Comparable<Assignment> {
 
   /// Constructs a new [Assignment] instance from a [formattedString].
   ///
-  factory Assignment.parse(String formattedString) {
-    final String trimmed = formattedString.trim();
-    final List<String> strings = trimmed.split('|');
-    final FormatException invalid = FormatException(
-      parseFormatExceptionMessage(className, formattedString),
-      formattedString,
-    );
-    if (strings case [
-      final String title,
-      final String start,
-      final String end,
-    ]) {
-      try {
-        return Assignment(
-          title: title,
-          start: DateTime.parse(start),
-          end: DateTime.parse(end),
-        );
-      } on FormatException {
-        throw invalid;
-      }
-    }
-    throw invalid;
-  }
+  /// The string has the form `<title>|<start>|<end>`, where the dates are in
+  /// ISO 8601 format. Whitespace around the whole string is ignored, and the
+  /// title must not contain the pipe character.
+  ///
+  /// Throws a [FormatException] if the string does not have exactly three
+  /// segments or if a date cannot be parsed. Use [tryParse] to get `null`
+  /// instead of an exception.
+  factory parse(String formattedString) =>
+      tryParse(formattedString) ??
+      (throw FormatException(
+        parseFormatExceptionMessage(className, formattedString),
+        formattedString,
+      ));
 
   /// The name of the class.
   static const String className = 'Assignment';
 
   /// The end date and time.
-  final DateTime end;
+  final DateTime end = maxDateTime(start, end);
 
   /// The start date and time.
-  final DateTime start;
-
-  /// The title that identifies the type of this assignment.
-  final String title;
+  final DateTime start = minDateTime(start, end);
 
   @override
+  @useResult
   int get hashCode => Object.hash(title, start, end);
 
-  /// Returns if this assignment comes before the [other].
-  ///
+  /// Whether this assignment comes before the [other].
+  @useResult
   bool operator <(Assignment other) => compareTo(other) < 0;
 
-  /// Returns if this assignment comes before or is equal to the [other].
-  ///
+  /// Whether this assignment comes before or is equal to the [other].
+  @useResult
   bool operator <=(Assignment other) => compareTo(other) <= 0;
 
   @override
+  @useResult
   bool operator ==(Object other) =>
-      identical(this, other) || (other is Assignment && compareTo(other) == 0);
+      identical(this, other) ||
+      (other is Assignment &&
+          end == other.end &&
+          start == other.start &&
+          title == other.title);
 
-  /// Returns if this assignment comes after the [other].
-  ///
+  /// Whether this assignment comes after the [other].
+  @useResult
   bool operator >(Assignment other) => compareTo(other) > 0;
 
-  /// Returns if this assignment comes after or is equal to the [other].
-  ///
+  /// Whether this assignment comes after or is equal to the [other].
+  @useResult
   bool operator >=(Assignment other) => compareTo(other) >= 0;
 
   @override
+  @useResult
   int compareTo(Assignment other) {
     if (identical(this, other)) {
       return 0;
@@ -144,6 +139,8 @@ class Assignment implements Comparable<Assignment> {
   /// Creates a copy of this [Assignment] instance, but with the given fields
   /// replaced with the new values.
   ///
+  /// If the resulting start comes after the resulting end, they are swapped.
+  @useResult
   Assignment copyWith({String? title, DateTime? start, DateTime? end}) =>
       Assignment(
         title: title ?? this.title,
@@ -152,11 +149,11 @@ class Assignment implements Comparable<Assignment> {
       );
 
   /// Returns a JSON string representing this instance of [Assignment].
-  ///
+  @useResult
   String toJson() => jsonEncode(toMap());
 
   /// Returns a map representing this instance of [Assignment].
-  ///
+  @useResult
   Map<String, Object?> toMap() => <String, Object?>{
     _titleKey: title,
     _startKey: start.toIso8601String(),
@@ -164,6 +161,26 @@ class Assignment implements Comparable<Assignment> {
   };
 
   @override
+  @useResult
   String toString() =>
       '$title|${start.toIso8601String()}|${end.toIso8601String()}';
+
+  /// Parses [formattedString] like [Assignment.parse], but returns `null`
+  /// instead of throwing when it is not a valid assignment.
+  @useResult
+  static Assignment? tryParse(String formattedString) {
+    if (formattedString.trim().split('|') case [
+      final String title,
+      final String start,
+      final String end,
+    ]) {
+      if ((DateTime.tryParse(start), DateTime.tryParse(end)) case (
+        final DateTime startDate,
+        final DateTime endDate,
+      )) {
+        return Assignment(title: title, start: startDate, end: endDate);
+      }
+    }
+    return null;
+  }
 }
