@@ -15,135 +15,128 @@ const String _startKey = 'start';
 /// [end]. The [start] must be before the [end]. If the [start] is after the
 /// [end], they are swapped.
 ///
-/// The [start] and [end] dates are inclusive. This means that the [start] date
-/// is included in the range and the [end] date is also included in the range.
-///
+/// The [start] and [end] dates are inclusive.
 @immutable
-class DateTimeRange implements Comparable<DateTimeRange> {
+class DateTimeRange._(
+  /// The start (inclusive).
+  final DateTime start,
+
+  /// The end (inclusive).
+  final DateTime end,
+) implements Comparable<DateTimeRange> {
   /// Constructs a new [DateTimeRange] instance from the two given dates.
   ///
-  DateTimeRange(DateTime dt1, DateTime dt2)
-    : start = minDateTime(dt1, dt2),
-      end = maxDateTime(dt1, dt2);
+  /// Performs a single comparison to put the dates in order.
+  factory(DateTime dt1, DateTime dt2) =>
+      dt1.isBefore(dt2) ? DateTimeRange._(dt1, dt2) : DateTimeRange._(dt2, dt1);
 
   /// Constructs a new [DateTimeRange] instance based on [json].
   ///
-  factory DateTimeRange.fromJson(String json) {
-    final Object? decoded;
+  /// Throws a [FormatException] if [json] is not valid JSON or does not
+  /// represent a map with valid `start` and `end` values.
+  factory fromJson(String json) {
     try {
-      decoded = jsonDecode(json);
-    } on Exception {
-      throw FormatException(
-        fromJsonFormatExceptionMessage(className, json),
-        json,
-      );
-    }
-    if (decoded is Map<String, Object?>) {
-      try {
-        return DateTimeRange.fromMap(decoded);
-      } on Exception {
-        throw FormatException(
-          fromJsonFormatExceptionMessage(className, json),
-          json,
-        );
+      final Object? decoded = jsonDecode(json);
+      if (decoded case final Map<String, Object?> map) {
+        return DateTimeRange.fromMap(map);
       }
-    } else {
+    } on FormatException {
       throw FormatException(
         fromJsonFormatExceptionMessage(className, json),
         json,
       );
     }
+    throw FormatException(
+      fromJsonFormatExceptionMessage(className, json),
+      json,
+    );
   }
 
   /// Constructs a new [DateTimeRange] instance based on [map].
   ///
-  DateTimeRange.fromMap(Map<String, Object?> map)
-    : this(
-        parseClass<DateTime, String>(
-          className: className,
-          map: map,
-          key: _startKey,
-          parser: DateTime.parse,
-        ),
-        parseClass<DateTime, String>(
-          className: className,
-          map: map,
-          key: _endKey,
-          parser: DateTime.parse,
-        ),
-      );
+  /// Throws a [FormatException] if a key is absent or its value is not a
+  /// parseable date string.
+  factory fromMap(Map<String, Object?> map) => DateTimeRange(
+    parseClass<DateTime, String>(
+      className: className,
+      map: map,
+      key: _startKey,
+      parser: DateTime.parse,
+    ),
+    parseClass<DateTime, String>(
+      className: className,
+      map: map,
+      key: _endKey,
+      parser: DateTime.parse,
+    ),
+  );
 
-  /// Constructs a new [DateTimeRange] instance from a [formattedString].
+  /// Constructs a new [DateTimeRange] instance from a [formattedString] of the
+  /// form `<start>|<end>`, where both dates are in ISO 8601 format.
   ///
-  factory DateTimeRange.parse(String formattedString) {
-    if (formattedString.trim().split('|') case [
-      final String stringStart,
-      final String stringEnd,
-    ]) {
-      if (DateTime.tryParse(stringStart) case final DateTime start) {
-        if (DateTime.tryParse(stringEnd) case final DateTime end) {
-          return DateTimeRange(start, end);
-        }
-      }
-    }
-    throw FormatException(
-      parseFormatExceptionMessage(className, formattedString),
-      formattedString,
-    );
-  }
-
-  /// Constructs a new [DateTimeRange] instance setting the fields directly when
-  /// order is already guaranteed by the caller. Avoids two redundant
-  /// comparisons per call site.
+  /// Whitespace around the whole string is ignored.
   ///
-  const DateTimeRange._(this.start, this.end);
+  /// Throws a [FormatException] if [formattedString] is not valid. Use
+  /// [tryParse] to get `null` instead of an exception.
+  factory parse(String formattedString) =>
+      tryParse(formattedString) ??
+      (throw FormatException(
+        parseFormatExceptionMessage(className, formattedString),
+        formattedString,
+      ));
 
   /// The name of the class.
   static const String className = 'DateTimeRange';
 
-  /// The end.
-  final DateTime end;
-
-  /// The start.
-  final DateTime start;
+  /// The duration of this range.
+  @useResult
+  Duration get duration => end.difference(start);
 
   @override
-  int get hashCode => Object.hash(end, start);
+  @useResult
+  int get hashCode =>
+      Object.hash(end.microsecondsSinceEpoch, start.microsecondsSinceEpoch);
 
-  /// Returns whether the [start] of this date time range is before the start of
-  /// the [other] date time range. Or whether, in the case where the two starts
-  /// are the same, the [end] of this date time range is before the end of the
+  /// Whether this range denotes a single moment.
+  @useResult
+  bool get isInstant => start.isAtSameMomentAs(end);
+
+  /// Whether the [start] of this date time range is before the start of the
+  /// [other] date time range. Or whether, in the case where the two starts are
+  /// the same, the [end] of this date time range is before the end of the
   /// [other] date time range.
-  ///
+  @useResult
   bool operator <(DateTimeRange other) => compareTo(other) < 0;
 
-  /// Returns whether the [start] of this date time range is before the start of
-  /// the [other] date time range. Or whether, in the case where the two starts
-  /// are the same, the [end] of this date time range is before or coincides
-  /// with the end of the [other] date time range.
-  ///
+  /// Whether the [start] of this date time range is before the start of the
+  /// [other] date time range. Or whether, in the case where the two starts are
+  /// the same, the [end] of this date time range is before or coincides with
+  /// the end of the [other] date time range.
+  @useResult
   bool operator <=(DateTimeRange other) => compareTo(other) <= 0;
 
   @override
+  @useResult
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is DateTimeRange && compareTo(other) == 0);
 
-  /// Returns whether the [start] of this date time range is after the start of
-  /// the [other] date time range. Or whether, in the case where the two starts
-  /// are the same, the [end] of this date time range is after the end of the
+  /// Whether the [start] of this date time range is after the start of the
+  /// [other] date time range. Or whether, in the case where the two starts are
+  /// the same, the [end] of this date time range is after the end of the
   /// [other] date time range.
-  ///
+  @useResult
   bool operator >(DateTimeRange other) => compareTo(other) > 0;
 
-  /// Returns whether the [start] of this date time range is after the start of
-  /// the [other] date time range. Or whether, in the case where the two starts
-  /// are the same, the [end] of this date time range is after or coincides
-  /// with the end of the [other] date time range.
-  ///
+  /// Whether the [start] of this date time range is after the start of the
+  /// [other] date time range. Or whether, in the case where the two starts are
+  /// the same, the [end] of this date time range is after or coincides with the
+  /// end of the [other] date time range.
+  @useResult
   bool operator >=(DateTimeRange other) => compareTo(other) >= 0;
 
   @override
+  @useResult
   int compareTo(DateTimeRange other) {
     if (identical(this, other)) {
       return 0;
@@ -152,68 +145,88 @@ class DateTimeRange implements Comparable<DateTimeRange> {
       0 => end.compareTo(other.end),
       final int result => result,
     };
-    // // 1º comparison
-    // final int comparison1 = start.compareTo(other.start);
-    // if (comparison1 != 0) {
-    //   return comparison1;
-    // }
-    // // Last comparison
-    // return end.compareTo(other.end);
   }
+
+  /// Whether [moment] lies within this range, bounds included.
+  @useResult
+  bool contains(DateTime moment) =>
+      moment.isAfterOrAtSameMomentAs(start) &&
+      moment.isBeforeOrAtSameMomentAs(end);
+
+  /// Whether [other] lies entirely within this range, bounds included.
+  @useResult
+  bool containsRange(DateTimeRange other) =>
+      start.isBeforeOrAtSameMomentAs(other.start) &&
+      end.isAfterOrAtSameMomentAs(other.end);
 
   /// Creates a copy of this [DateTimeRange] instance, but with the given fields
   /// replaced with the new values.
   ///
+  /// If the resulting start comes after the resulting end, they are swapped.
+  @useResult
   DateTimeRange copyWith({DateTime? end, DateTime? start}) =>
       DateTimeRange(start ?? this.start, end ?? this.end);
 
-  /// Returns if this date time range ends before or on the start of the
-  /// [other].
-  ///
-  bool endsBeforeOrAtStart(DateTimeRange other) =>
-      end.isBefore(other.start) || end.isAtSameMomentAs(other.start);
+  /// Whether this date time range ends before or on the start of the [other].
+  @useResult
+  bool endsBeforeOrAtStart(DateTimeRange other) => !end.isAfter(other.start);
 
-  /// Returns if this date time range ends before the start of the [other].
-  ///
+  /// Whether this date time range ends before the start of the [other].
+  @useResult
   bool endsBeforeStart(DateTimeRange other) => end.isBefore(other.start);
 
-  /// Returns if this date time range overlaps with or touches the [other].
+  /// Returns the part shared with the [other], or `null` if the two ranges
+  /// neither overlap nor touch.
   ///
+  /// Ranges that only touch share a single moment, so the result is an
+  /// instant.
+  @useResult
+  DateTimeRange? intersection(DateTimeRange other) {
+    final DateTime shared = maxDateTime(start, other.start);
+    final DateTime sharedEnd = minDateTime(end, other.end);
+    return shared.isAfter(sharedEnd)
+        ? null
+        : DateTimeRange._(shared, sharedEnd);
+  }
+
+  /// Whether this date time range overlaps with or touches the [other].
+  @useResult
   bool overlapsOrTouches(DateTimeRange other) =>
       !(start.isAfter(other.end) || end.isBefore(other.start));
 
-  /// Returns if this date time range starts after the end of the [other].
-  ///
+  /// Whether this date time range starts after the end of the [other].
+  @useResult
   bool startsAfterEnds(DateTimeRange other) => start.isAfter(other.end);
 
-  /// Returns if this date time range starts after or on the end of the [other].
-  ///
-  bool startsAfterOrAtEnd(DateTimeRange other) =>
-      start.isAfter(other.end) || start.isAtSameMomentAs(other.end);
+  /// Whether this date time range starts after or on the end of the [other].
+  @useResult
+  bool startsAfterOrAtEnd(DateTimeRange other) => !start.isBefore(other.end);
 
   /// Returns a JSON string representing this instance of [DateTimeRange].
-  ///
+  @useResult
   String toJson() => jsonEncode(toMap());
 
   /// Returns a map representing this instance of [DateTimeRange].
-  ///
+  @useResult
   Map<String, Object?> toMap() => <String, Object?>{
     _endKey: end.toIso8601String(),
     _startKey: start.toIso8601String(),
   };
 
   @override
+  @useResult
   String toString() => '${start.toIso8601String()}|${end.toIso8601String()}';
 
-  /// Returns if there are overlapping ranges within the [ranges].
+  /// Whether any two ranges in [ranges] overlap or touch.
   ///
+  /// Because [ranges] is sorted, only neighboring ranges need to be checked.
+  @useResult
   static bool areThereOverlaps(SplayTreeSet<DateTimeRange> ranges) {
     if (ranges.length < 2) {
       return false;
     } else {
-      /// Using [Iterator] is more performant because the iterators are designed
-      /// for efficient sequential access and do not have the logarithmic
-      /// overhead of [elementAt].
+      /// An [Iterator] gives efficient sequential access, without the
+      /// logarithmic cost of [elementAt].
       final Iterator<DateTimeRange> iterator = ranges.iterator..moveNext();
       DateTimeRange previous = iterator.current;
       while (iterator.moveNext()) {
@@ -227,25 +240,14 @@ class DateTimeRange implements Comparable<DateTimeRange> {
     }
   }
 
-  /// Joins two [DateTimeRange] objects, merging them if they overlap or touch.
+  /// Joins two [DateTimeRange]s, merging them if they overlap or touch.
   ///
-  /// Attempts to combine [dtr1] and [dtr2] into a single [DateTimeRange] if
-  /// their temporal extents either overlap or are immediately adjacent
-  /// (touching).
+  /// If [dtr1] and [dtr2] overlap or touch, the result contains a single range
+  /// that spans from the earliest start to the latest end. Otherwise, the
+  /// result contains both ranges, unmerged.
   ///
-  /// If [dtr1] and [dtr2] overlap or touch, a new [DateTimeRange] is created
-  /// that spans from the earliest start time of the two ranges to the latest
-  /// end time. The result is a [SplayTreeSet] containing this single merged
-  /// range.
-  ///
-  /// If [dtr1] and [dtr2] do not overlap and are not touching, they are
-  /// considered distinct. In this scenario, the method returns a [SplayTreeSet]
-  /// containing both [dtr1] and [dtr2] as separate, unmerged ranges.
-  ///
-  /// The returned [SplayTreeSet] guarantees that the [DateTimeRange] objects
-  /// (if more than one) are ordered according to their natural comparison (in
-  /// accordance with the [compareTo] method).
-  ///
+  /// The result is ordered according to [DateTimeRange.compareTo].
+  @useResult
   static SplayTreeSet<DateTimeRange> join(
     DateTimeRange dtr1,
     DateTimeRange dtr2,
@@ -263,23 +265,22 @@ class DateTimeRange implements Comparable<DateTimeRange> {
       ..add(dtr2);
   }
 
-  /// Merges overlapping or adjacent [DateTimeRange] instances into a
-  /// consolidated set.
+  /// Merges overlapping or adjacent ranges into a consolidated set.
   ///
   /// Takes a collection of [DateTimeRange] objects and combines them if they
   /// overlap or are immediately adjacent to each other. Returns a
   /// [SplayTreeSet] containing the merged ranges in ascending order.
   ///
   /// Returns an empty set if no ranges are provided.
-  ///
+  @useResult
   static SplayTreeSet<DateTimeRange> merge(Iterable<DateTimeRange> ranges) {
     if (ranges.isEmpty) {
       return SplayTreeSet<DateTimeRange>();
     }
-    final List<DateTimeRange> sorted = List<DateTimeRange>.of(ranges)..sort();
-    final List<DateTimeRange> merged = <DateTimeRange>[];
+    final sorted = List<DateTimeRange>.of(ranges)..sort();
+    final merged = SplayTreeSet<DateTimeRange>();
     DateTimeRange current = sorted.first;
-    for (int i = 1; i < sorted.length; i++) {
+    for (var i = 1; i < sorted.length; i++) {
       final DateTimeRange next = sorted[i];
       if (current.overlapsOrTouches(next)) {
         current = DateTimeRange._(
@@ -292,6 +293,24 @@ class DateTimeRange implements Comparable<DateTimeRange> {
       }
     }
     merged.add(current);
-    return SplayTreeSet<DateTimeRange>.from(merged);
+    return merged;
+  }
+
+  /// Parses [formattedString] like [DateTimeRange.parse], but returns `null`
+  /// instead of throwing when it is not a valid range.
+  @useResult
+  static DateTimeRange? tryParse(String formattedString) {
+    if (formattedString.trim().split('|') case [
+      final String start,
+      final String end,
+    ]) {
+      if ((DateTime.tryParse(start), DateTime.tryParse(end)) case (
+        final DateTime start,
+        final DateTime end,
+      )) {
+        return DateTimeRange(start, end);
+      }
+    }
+    return null;
   }
 }
