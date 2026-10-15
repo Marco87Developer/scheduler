@@ -358,6 +358,8 @@ void main() {
     });
 
     test('does not mutate the original instance', () {
+      /// copyWith not used because of this test.
+      // ignore: unused_result
       original.copyWith(title: 'Meeting');
       expect(original.title, equals('Talk'));
     });
