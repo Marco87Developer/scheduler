@@ -91,7 +91,7 @@ void main() {
       check(report.sharedMinistry).isTrue();
     });
     test('forces sharedMinistry true when hours is positive', () {
-      const report = ServiceReport(
+      final report = ServiceReport(
         hours: 1,
         month: 5,
         sharedMinistry: false,
@@ -100,7 +100,7 @@ void main() {
       check(report.sharedMinistry).isTrue();
     });
     test('keeps sharedMinistry false when hours is zero', () {
-      const report = ServiceReport(
+      final report = ServiceReport(
         hours: 0,
         month: 5,
         sharedMinistry: false,

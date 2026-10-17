@@ -22,7 +22,7 @@ const String _yearKey = 'year';
 /// * Check that 1 <= [month] <= 12.
 /// * Check that [year] >= 0.
 @immutable
-class const ServiceReport({
+class ServiceReport({
   required int month,
   required bool sharedMinistry,
 
