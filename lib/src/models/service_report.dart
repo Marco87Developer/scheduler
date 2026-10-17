@@ -15,33 +15,39 @@ const String _yearKey = 'year';
 
 /// The [ServiceReport] of a publisher.
 ///
+/// Important:
+///
+/// * Check that [bibleStudies] >= 0.
+/// * Check that [hours] is either `null` or >= 0.
+/// * Check that 1 <= [month] <= 12.
+/// * Check that [year] >= 0.
 @immutable
-class ServiceReport implements Comparable<ServiceReport> {
-  /// Constructs a new [ServiceReport] instance.
-  ///
-  /// Important:
-  ///
-  /// * Check that [bibleStudies] >= 0.
-  /// * Check that [hours] is either `null` or >= 0.
-  /// * Check that 1 <= [month] <= 12.
-  /// * Check that [year] >= 0.
-  ///
-  const ServiceReport({
-    this.bibleStudies = 0,
-    this.comments = '',
-    this.hourCredit,
-    this.hours,
-    required int month,
-    required bool sharedMinistry,
-    required this.year,
-  }) : month = month % 12 == 0 ? 12 : month % 12,
-       sharedMinistry =
-           (hours != null && hours > 0) || sharedMinistry || bibleStudies > 0;
+class const ServiceReport({
+  required int month,
+  required bool sharedMinistry,
 
+  /// The year.
+  required final int year,
+
+  /// Comments.
+  final String comments = '',
+
+  /// The number of *different* Bible studies conducted.
+  final int bibleStudies = 0,
+
+  /// The hour credit.
+  final HourCredit? hourCredit,
+
+  /// The number of hours (if auxiliary, regular, or special pioneer or field
+  /// missionary).
+  final int? hours,
+}) implements Comparable<ServiceReport> {
   /// Constructs a new [ServiceReport] instance based on [json].
   ///
-  factory ServiceReport.fromJson(String json) {
-    final FormatException invalid = FormatException(
+  /// Throws a [FormatException] if [json] is not valid JSON or does not
+  /// represent a valid service report.
+  factory fromJson(String json) {
+    final invalid = FormatException(
       fromJsonFormatExceptionMessage(className, json),
       json,
     );
@@ -63,7 +69,8 @@ class ServiceReport implements Comparable<ServiceReport> {
 
   /// Constructs a new [ServiceReport] instance based on [map].
   ///
-  ServiceReport.fromMap(Map<String, Object?> map)
+  /// Throws a [FormatException] if a value is absent or has an invalid type.
+  new fromMap(Map<String, Object?> map)
     : this(
         bibleStudies: parseInt(
           className: className,
@@ -93,112 +100,36 @@ class ServiceReport implements Comparable<ServiceReport> {
 
   /// Constructs a new [ServiceReport] instance from a [formattedString].
   ///
-  factory ServiceReport.parse(String formattedString) {
-    final FormatException invalid = FormatException(
-      parseFormatExceptionMessage(className, formattedString),
-      formattedString,
-    );
-    final List<String> properties = formattedString.trim().split('|');
-    try {
-      return switch (properties) {
-        /// Case 1: [hourCredit] is `null`
-        [
-          final String year,
-          final String month,
-          final String sharedMinistry,
-          final String bibleStudies,
-          'null',
-          final String hours,
-          final String comments,
-        ] =>
-          ServiceReport(
-            bibleStudies: int.parse(bibleStudies),
-            comments: comments,
-            hours: int.tryParse(hours),
-            month: int.parse(month),
-            sharedMinistry: bool.parse(sharedMinistry),
-            year: int.parse(year),
-          ),
-
-        /// Case 2: [hourCredit] exists but has no tags
-        [
-          final String year,
-          final String month,
-          final String sharedMinistry,
-          final String bibleStudies,
-          final String description,
-          final String hourCreditHours,
-          final String hours,
-          final String comments,
-        ] =>
-          ServiceReport(
-            bibleStudies: int.parse(bibleStudies),
-            comments: comments,
-            hourCredit: HourCredit.parse('$description|$hourCreditHours'),
-            hours: int.tryParse(hours),
-            month: int.parse(month),
-            sharedMinistry: bool.parse(sharedMinistry),
-            year: int.parse(year),
-          ),
-
-        /// Case 3: [hourCredit] exists and has tags
-        [
-          final String year,
-          final String month,
-          final String sharedMinistry,
-          final String bibleStudies,
-          final String description,
-          final String hourCreditHours,
-          final String tags,
-          final String hours,
-          final String comments,
-        ] =>
-          ServiceReport(
-            bibleStudies: int.parse(bibleStudies),
-            comments: comments,
-            hourCredit: HourCredit.parse('$description|$hourCreditHours|$tags'),
-            hours: int.tryParse(hours),
-            month: int.parse(month),
-            sharedMinistry: bool.parse(sharedMinistry),
-            year: int.parse(year),
-          ),
-        _ => throw invalid,
-      };
-    } on FormatException {
-      throw invalid;
-    }
-  }
+  /// The string has the form
+  /// `<year>|<month>|<sharedMinistry>|<bibleStudies>|<hourCredit>|<hours>|<comments>`,
+  /// where `<hourCredit>` is either `null` or the [HourCredit] string format.
+  ///
+  /// Throws a [FormatException] if [formattedString] is not valid. Use
+  /// [tryParse] to get `null` instead of an exception.
+  factory parse(String formattedString) =>
+      tryParse(formattedString) ??
+      (throw FormatException(
+        parseFormatExceptionMessage(className, formattedString),
+        formattedString,
+      ));
 
   /// The name of the class.
   static const String className = 'ServiceReport';
 
-  /// The number of *different* Bible studies conducted.
-  final int bibleStudies;
+  /// The month, from 1 to 12.
+  final int month = (month - 1) % 12 + 1;
 
-  /// Comments.
-  final String comments;
+  /// Whether the publisher shared in any form of the ministry during the month.
+  ///
+  /// It is always `true` when [hours] or [bibleStudies] is positive.
+  final bool sharedMinistry =
+      sharedMinistry || bibleStudies > 0 || (hours != null && hours > 0);
 
-  /// The hour credit.
-  final HourCredit? hourCredit;
-
-  /// The number of hours (if auxiliary, regular, or special pioneer or field
-  /// missionary).
-  final int? hours;
-
-  /// The month.
-  final int month;
-
-  /// If the publisher shared in any form of the ministry during the month.
-  final bool sharedMinistry;
-
-  /// The year.
-  final int year;
-
-  /// The year and month of the service report, but expressed as an instance of
-  /// [DateTime].
+  /// The year and month of the service report, expressed as a [DateTime].
   DateTime get date => DateTime(year, month);
 
   @override
+  @useResult
   int get hashCode => Object.hash(
     bibleStudies,
     comments,
@@ -209,30 +140,32 @@ class ServiceReport implements Comparable<ServiceReport> {
     year,
   );
 
-  /// Returns if this service report comes before the [other].
-  ///
+  /// Whether this service report comes before the [other].
+  @useResult
   bool operator <(ServiceReport other) => compareTo(other) < 0;
 
-  /// Returns if this service report comes before or is equal to the
+  /// Whether this service report comes before or is equal to the
   /// [other].
-  ///
+  @useResult
   bool operator <=(ServiceReport other) => compareTo(other) <= 0;
 
   @override
+  @useResult
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ServiceReport && compareTo(other) == 0);
 
-  /// Returns if this service report comes after the [other].
-  ///
+  /// Whether this service report comes after the [other].
+  @useResult
   bool operator >(ServiceReport other) => compareTo(other) > 0;
 
-  /// Returns if this service report comes after or is equal to the
+  /// Whether this service report comes after or is equal to the
   /// [other].
-  ///
+  @useResult
   bool operator >=(ServiceReport other) => compareTo(other) >= 0;
 
   @override
+  @useResult
   int compareTo(ServiceReport other) {
     if (identical(this, other)) {
       return 0;
@@ -276,6 +209,10 @@ class ServiceReport implements Comparable<ServiceReport> {
   /// Creates a copy of this [ServiceReport] instance, but with the given
   /// fields replaced with the new values.
   ///
+  /// Because [hourCredit] and [hours] are nullable, they take a function that
+  /// returns the new value, which makes it possible to replace them with
+  /// `null`.
+  @useResult
   ServiceReport copyWith({
     int? bibleStudies,
     String? comments,
@@ -295,11 +232,11 @@ class ServiceReport implements Comparable<ServiceReport> {
   );
 
   /// Returns a JSON string representing this instance of [ServiceReport].
-  ///
+  @useResult
   String toJson() => jsonEncode(toMap());
 
   /// Returns a map representing this instance of [ServiceReport].
-  ///
+  @useResult
   Map<String, Object?> toMap() => <String, Object?>{
     _bibleStudiesKey: bibleStudies,
     _commentsKey: comments,
@@ -311,6 +248,53 @@ class ServiceReport implements Comparable<ServiceReport> {
   };
 
   @override
+  @useResult
   String toString() =>
       '$year|$month|$sharedMinistry|$bibleStudies|$hourCredit|$hours|$comments';
+
+  /// Parses [formattedString] like [ServiceReport.parse], but returns `null`
+  /// instead of throwing when it is not a valid service report.
+  @useResult
+  static ServiceReport? tryParse(String formattedString) {
+    final List<String> properties = formattedString.trim().split('|');
+    final int length = properties.length;
+    final String? credit;
+    switch (length) {
+      case 7 when properties[4] == 'null':
+        credit = null;
+      case 8:
+        credit = '${properties[4]}|${properties[5]}';
+      case 9:
+        credit = '${properties[4]}|${properties[5]}|${properties[6]}';
+      default:
+        return null;
+    }
+    final int? year = int.tryParse(properties[0]);
+    final int? month = int.tryParse(properties[1]);
+    final bool? sharedMinistry = bool.tryParse(properties[2]);
+    final int? bibleStudies = int.tryParse(properties[3]);
+    if (year == null ||
+        month == null ||
+        sharedMinistry == null ||
+        bibleStudies == null) {
+      return null;
+    }
+    HourCredit? hourCredit;
+    if (credit != null) {
+      try {
+        hourCredit = HourCredit.parse(credit);
+      } on FormatException {
+        return null;
+      }
+    }
+    return ServiceReport(
+      bibleStudies: bibleStudies,
+      comments: properties[length - 1],
+      hourCredit: hourCredit,
+      hours: int.tryParse(properties[length - 2]),
+      month: month,
+      sharedMinistry: sharedMinistry,
+      year: year,
+    );
+  }
 }
