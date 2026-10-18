@@ -6,31 +6,27 @@ import 'package:scheduler/src/extensions/date_time_extension.dart';
 ///
 /// A service year runs from September 1st of one calendar year to August 31st
 /// of the following calendar year.
-///
 @immutable
-class ServiceYear implements Comparable<ServiceYear> {
-  /// Constructs a new [ServiceYear] instance.
-  ///
-  const ServiceYear(this.startingYear);
-
+class const ServiceYear(
+  /// The year this service year starts.
+  final int startingYear,
+) implements Comparable<ServiceYear> {
   /// Constructs a new [ServiceYear] instance based on [reference].
-  ///
-  ServiceYear.fromReference(DateTime reference)
+  new fromReference(DateTime reference)
     : this(reference.month >= firstMonth ? reference.year : reference.year - 1);
 
   /// Constructs a new [ServiceYear] instance from a [formattedString].
   ///
-  /// Throws a [FormatException] if [formattedString] cannot be parsed as an
-  /// `int`.
+  /// Whitespace around [formattedString] is ignored.
   ///
-  factory ServiceYear.parse(String formattedString) =>
-      switch (int.tryParse(formattedString.trim())) {
-        final int year => ServiceYear(year),
-        null => throw FormatException(
-          parseFormatExceptionMessage(className, formattedString),
-          formattedString,
-        ),
-      };
+  /// Throws a [FormatException] if [formattedString] cannot be parsed as an
+  /// `int`. Use [tryParse] to get `null` instead of an exception.
+  factory parse(String formattedString) =>
+      tryParse(formattedString) ??
+      (throw FormatException(
+        parseFormatExceptionMessage(className, formattedString),
+        formattedString,
+      ));
 
   /// The name of the class.
   static const String className = 'ServiceYear';
@@ -41,41 +37,43 @@ class ServiceYear implements Comparable<ServiceYear> {
   /// The last month of a service year.
   static const int lastMonth = 8;
 
-  /// The year this service year starts.
-  final int startingYear;
-
   /// The end date of this service year (exclusive upper bound).
+  @useResult
   DateTime get end => DateTime(startingYear + 1, firstMonth);
 
   @override
   int get hashCode => startingYear.hashCode;
 
   /// The start date of this service year (inclusive).
+  @useResult
   DateTime get start => DateTime(startingYear, firstMonth);
 
-  /// Returns if this service year starts before the [other].
-  ///
+  /// Whether this service year starts before the [other].
+  @useResult
   bool operator <(ServiceYear other) => compareTo(other) < 0;
 
-  /// Returns if this service year starts before or at the same time as the
+  /// Whether this service year starts before or at the same time as the
   /// [other].
-  ///
+  @useResult
   bool operator <=(ServiceYear other) => compareTo(other) <= 0;
 
   @override
+  @useResult
   bool operator ==(Object other) =>
-      identical(this, other) || (other is ServiceYear && compareTo(other) == 0);
+      identical(this, other) ||
+      (other is ServiceYear && startingYear == other.startingYear);
 
-  /// Returns if this service year starts after the [other].
-  ///
+  /// Whether this service year starts after the [other].
+  @useResult
   bool operator >(ServiceYear other) => compareTo(other) > 0;
 
-  /// Returns if this service year starts after or at the same time as the
+  /// Whether this service year starts after or at the same time as the
   /// [other].
-  ///
+  @useResult
   bool operator >=(ServiceYear other) => compareTo(other) >= 0;
 
   @override
+  @useResult
   int compareTo(ServiceYear other) =>
       identical(this, other) ? 0 : startingYear.compareTo(other.startingYear);
 
@@ -83,34 +81,39 @@ class ServiceYear implements Comparable<ServiceYear> {
   ///
   /// Returns true when [reference] is on or after [start] and strictly before
   /// [end].
-  ///
+  @useResult
   bool contains(DateTime reference) =>
       reference.isAfterOrAtSameMomentAs(start) && reference.isBefore(end);
 
-  /// The number of months remaining in this service year, counting
-  /// [reference]’s own month.
+  /// The number of months remaining in this service year, counting the month
+  /// of [reference].
   ///
   /// Returns `null` when [reference] is outside this service year.
-  ///
-  int? monthsLeft(DateTime reference) =>
-      contains(reference) ? 12 - monthsPassed(reference)! : null;
+  @useResult
+  int? monthsLeft(DateTime reference) => contains(reference)
+      ? DateTime.monthsPerYear - monthsPassed(reference)!
+      : null;
 
   /// The number of complete months elapsed since the [start] of this service
   /// year up to (but not including) the month of [reference].
   ///
   /// Returns `null` when [reference] is outside this service year.
-  ///
-  int? monthsPassed(DateTime reference) =>
-      contains(reference) ? (reference.month + 12 - firstMonth) % 12 : null;
+  @useResult
+  int? monthsPassed(DateTime reference) => contains(reference)
+      ? (reference.month + DateTime.monthsPerYear - firstMonth) %
+            DateTime.monthsPerYear
+      : null;
 
   @override
+  @useResult
   String toString() => '$startingYear';
 
   /// Parses [formattedString] like [ServiceYear.parse], but returns `null`
   /// instead of throwing when [formattedString] is not a valid integer.
-  ///
-  static ServiceYear? tryParse(String formattedString) {
-    final int? year = int.tryParse(formattedString.trim());
-    return year != null ? ServiceYear(year) : null;
-  }
+  @useResult
+  static ServiceYear? tryParse(String formattedString) =>
+      switch (int.tryParse(formattedString.trim())) {
+        final int year => ServiceYear(year),
+        null => null,
+      };
 }
